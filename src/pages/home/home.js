@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaCalendarAlt, FaBell, FaEnvelope } from 'react-icons/fa';
 import './home.css';
- // Make sure to add your logo image
 
 const Home = () => {
   const specializations = [
@@ -22,11 +21,12 @@ const Home = () => {
         </Link>
       </div>
 
-      <div className="search-bar">
-        <input type="text" placeholder="Search doctors, specializations..." />
-      </div>
+      <div className="main-content">
+        <div className="search-bar">
+          <input type="text" placeholder="Search doctors, specializations..." />
+        </div>
 
-      <div className="content-area">
+        <h2 className="section-title">Specializations</h2>
         <div className="specialization-scroll">
           {specializations.map(spec => (
             <div key={spec.id} className="spec-card">
