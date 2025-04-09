@@ -1,0 +1,199 @@
+.app-container {
+  background: linear-gradient(to bottom, #e6f3ff, #ffffff);
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(to bottom, #e6f3ff, #e6f3ff);
+  z-index: 1031;
+}
+
+.search-bar {
+  position: fixed;
+  top: 60px; /* Position right after header */
+  left: 0;
+  right: 0;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(to bottom, #e6f3ff, #e6f3ff);
+  z-index: 1030;
+}
+
+.content-area {
+  margin-top: 120px; /* Combined height of header and search bar */
+  margin-bottom: 60px;
+  padding: 0.5rem 1rem;
+  overflow-y: auto;
+}
+
+.app-logo {
+  height: 40px;
+  object-fit: contain;
+}
+
+.message-icon {
+  color: #007bff;
+  font-size: 1.5rem;
+  position: relative;
+}
+
+.message-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4757;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Update search-bar margin */
+.search-bar {
+  margin-top: 70px;
+}
+
+/* Update content-area margin */
+.content-area {
+  margin-top: 140px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+}
+
+/* Main scrollable content area */
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  margin-top: 70px; /* Height of search bar */
+  margin-bottom: 70px; /* Height of bottom nav */
+  -webkit-overflow-scrolling: touch;
+}
+
+.specialization-scroll {
+  display: flex;
+  overflow-x: auto;
+  padding: 1rem 0;
+  gap: 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.specialization-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.spec-card {
+  min-width: 200px;
+  background: white;
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.spec-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.spec-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.rating {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.doctor-count {
+  color: #666;
+}
+
+.nearby-doctors {
+  margin: 2rem 0;
+}
+
+.map-preview {
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
+              url('/public/map.jpg');
+  background-size: cover;
+  padding: 1.5rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.map-preview h2 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.map-preview p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.view-map-btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: #007bff;
+  color: white;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.8rem 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.nav-item.active {
+  color: #007bff;
+}
+
+.nav-item svg {
+  font-size: 1.5rem;
+  margin-bottom: 0.2rem;
+}
