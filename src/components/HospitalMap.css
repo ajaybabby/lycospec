@@ -1,0 +1,61 @@
+.hospital-map-container {
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.map-tiles {
+  filter: hue-rotate(120deg) saturate(0.8);
+}
+
+.find-hospital-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 16px 0;
+  transition: background 0.3s ease;
+}
+
+.find-hospital-btn:hover {
+  background: #1976D2;
+}
+
+.nearest-hospitals {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.hospitals-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.hospital-item {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.hospital-item h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.hospital-item p {
+  margin: 0;
+  color: #666;
+}

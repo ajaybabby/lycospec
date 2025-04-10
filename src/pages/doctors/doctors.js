@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaCalendarAlt, FaBell, FaEnvelope } from 'react-icons/fa';
 import './doctors.css';
 
+
 const Doctors = () => {
   const doctors = [
     {
@@ -37,6 +38,7 @@ const Doctors = () => {
       </div>
 
       <div className="main-content">
+        
         <div className="doctors-hero">
           <div className="search-bar">
             <input type="text" placeholder="Search doctors, specializations..." />

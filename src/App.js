@@ -7,6 +7,7 @@ import Doctors from './pages/doctors/doctors';
 import DoctorLogin from './pages/doctorlogin/doctorlogin';
 import DoctorDashboard from './pages/doctorlogin/doctordashboard/doctordashboard';
 import VideoConsultations from './pages/doctorlogin/videoconsultations/videoconsultations';
+import HospitalMap from './components/HospitalMap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/doctorlogin" element={<DoctorLogin />} />
         <Route path="/doctordashboard" element={<DoctorDashboard />} />
         <Route path="/video-consultations" element={<VideoConsultations />} />
+        <Route path="/hospitalmap" element={<HospitalMap />} />
       </Routes>
     </Router>
   );
