@@ -1,10 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaHome, FaUser, FaCalendarAlt, FaBell, FaEnvelope } from 'react-icons/fa';
+import RegisterPopup from '../../components/RegisterPopup';
 import './doctors.css';
 
-
 const Doctors = () => {
+  const navigate = useNavigate();
+  const [showRegister, setShowRegister] = useState(false);
+  const [selectedDoctorId, setSelectedDoctorId] = useState(null);
+  const isLoggedIn = localStorage.getItem('user') !== null;
+
+  const handleBookAppointment = (doctorId) => {
+    if (!isLoggedIn) {
+      setSelectedDoctorId(doctorId);
+      setShowRegister(true);
+      return;
+    }
+    navigate(`/book-appointment/${doctorId}`);
+  };
+  const handleRegister = (formData) => {
+    localStorage.setItem('user', JSON.stringify(formData));
+    setShowRegister(false);
+    if (selectedDoctorId) {
+      navigate(`/book-appointment/${selectedDoctorId}`);
+    }
+  };
   const doctors = [
     {
       id: 1,
@@ -57,9 +77,12 @@ const Doctors = () => {
                   <span className="rating">★ {doctor.rating}</span>
                 </div>
                 <p className="availability">{doctor.availability}</p>
-                <Link to={`/book-appointment/${doctor.id}`} className="book-now-btn">
+                <button 
+                  onClick={() => handleBookAppointment(doctor.id)} 
+                  className="book-now-btn"
+                >
                   Book Now
-                </Link>
+                </button>
               </div>
             </div>
           ))}
@@ -84,6 +107,13 @@ const Doctors = () => {
           <span>Profile</span>
         </Link>
       </nav>
+      
+      {showRegister && (
+        <RegisterPopup
+          onClose={() => setShowRegister(false)}
+          onRegister={handleRegister}
+        />
+      )}
     </div>
   );
 };
