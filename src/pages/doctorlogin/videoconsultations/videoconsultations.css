@@ -1,0 +1,45 @@
+.video-consultations-header {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.video-appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.video-appointment-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.join-call-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #2196F3;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.join-call-btn:hover {
+  background: #1976D2;
+}
+
+.video-actions {
+  display: flex;
+  gap: 1rem;
+}
