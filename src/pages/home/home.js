@@ -39,15 +39,122 @@ const Home = () => {
           ))}
         </div>
 
-        <div className="nearby-doctors">
-          <div className="map-preview">
-            <h2>Find Doctors Near You</h2>
-            <p>20+ doctors available in your area</p>
-            <Link to="/map" className="view-map-btn">View Map</Link>
+        <div className="cards-row">
+          <div className="nearby-doctors">
+            <div className="map-preview">
+              <h2>Find Doctors Near You</h2>
+              <p>20+ doctors available in your area</p>
+              <Link to="/map" className="view-map-btn">View Map</Link>
+            </div>
+          </div>
+
+          <div className="video-consult">
+            <div className="video-preview">
+              <h2>Instant Video Consultation</h2>
+              <p>Connect within 60 secs</p>
+              <Link to="/video-consult" className="view-map-btn">Consult Now</Link>
+            </div>
           </div>
         </div>
-      </div>
 
+        <div className="online-consultation">
+          <h2 className="section-title">Consult Top Doctors Online</h2>
+          <p className="section-subtitle">Private online consultations with verified doctors</p>
+          
+          <div className="consult-scroll">
+            <Link to="/consult/pregnancy" className="consult-card">
+              <div className="consult-content">
+                <img src="peroid.jpg" alt="Pregnancy" className="consult-image" />
+                <h3>Period doubts or Pregnancy</h3>
+                <button className="consult-btn">CONSULT NOW</button>
+              </div>
+            </Link>
+            <Link to="/consult/skin" className="consult-card">
+              <div className="consult-content">
+                <img src="skin.jpg" alt="Skin Care" className="consult-image" />
+                <h3>Acne, pimple or skin issues</h3>
+                <button className="consult-btn">CONSULT NOW</button>
+              </div>
+            </Link>
+            <Link to="/consult/performance" className="consult-card">
+              <div className="consult-content">
+                <img src="performance.jpg" alt="Performance" className="consult-image" />
+                <h3>Performance issues in bed</h3>
+                <button className="consult-btn">CONSULT NOW</button>
+              </div>
+            </Link>
+            <Link to="/consult/cold" className="consult-card">
+              <div className="consult-content">
+                <img src="cold.png" alt="Cold" className="consult-image" />
+                <h3>Cold, cough or fever</h3>
+                <button className="consult-btn">CONSULT NOW</button>
+              </div>
+            </Link>
+            <Link to="/consult/child" className="consult-card">
+              <div className="consult-content">
+                <img src="child.jpg" alt="Child" className="consult-image" />
+                <h3>Child not feeling well</h3>
+                <button className="consult-btn">CONSULT NOW</button>
+              </div>
+            </Link>
+            <Link to="/consult/mental" className="consult-card">
+              <div className="consult-content">
+                <img src="mental.jpg" alt="Mental" className="consult-image" />
+                <h3>Depression or anxiety</h3>
+                <button className="consult-btn">CONSULT NOW</button>
+              </div>
+            </Link>
+          </div>
+        </div>
+        {/* After online consultation section */}
+            <div className="clinic-consultation">
+              <h2 className="section-title">Book an appointment in clinics</h2>
+              <div className="clinic-scroll">
+                <Link to="/clinic/dentist" className="clinic-card">
+                  <div className="clinic-content">
+                    <img src="dentist.jpg" alt="Dentist" className="clinic-image" />
+                    <h3>Dentist</h3>
+                    <p>Teeth troubles & dental care</p>
+                  </div>
+                </Link>
+                <Link to="/clinic/orthopedic" className="clinic-card">
+                  <div className="clinic-content">
+                    <img src="orthopedic.jpg" alt="Orthopedic" className="clinic-image" />
+                    <h3>Orthopedic</h3>
+                    <p>Bone & joint issues</p>
+                  </div>
+                </Link>
+                <Link to="/clinic/cardiologist" className="clinic-card">
+                  <div className="clinic-content">
+                    <img src="cardiologist.jpg" alt="Cardiologist" className="clinic-image" />
+                    <h3>Cardiologist</h3>
+                    <p>Heart & blood pressure</p>
+                  </div>
+                </Link>
+                <Link to="/clinic/pediatrician" className="clinic-card">
+                  <div className="clinic-content">
+                    <img src="pediatrician.jpg" alt="Pediatrician" className="clinic-image" />
+                    <h3>Pediatrician</h3>
+                    <p>Child specialists</p>
+                  </div>
+                </Link>
+                <Link to="/clinic/gynecologist" className="clinic-card">
+                  <div className="clinic-content">
+                    <img src="gynic.jpg" alt="Gynecologist" className="clinic-image" />
+                    <h3>Gynecologist</h3>
+                    <p>Women's health</p>
+                  </div>
+                </Link>
+                <Link to="/clinic/neurologist" className="clinic-card">
+                  <div className="clinic-content">
+                    <img src="neuro.jpg" alt="Neurologist" className="clinic-image" />
+                    <h3>Neurologist</h3>
+                    <p>Brain & nerve issues</p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+      </div>
       <nav className="bottom-nav">
         <Link to="/" className="nav-item active">
           <FaHome />
