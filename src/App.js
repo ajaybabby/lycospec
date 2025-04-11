@@ -9,6 +9,7 @@ import DoctorDashboard from './pages/doctorlogin/doctordashboard/doctordashboard
 import VideoConsultations from './pages/doctorlogin/videoconsultations/videoconsultations';
 import HospitalMap from './components/HospitalMap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import BookingPage from './pages/booking/BookingPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/doctordashboard" element={<DoctorDashboard />} />
         <Route path="/video-consult" element={<VideoConsultations />} />
         <Route path="/hospitalmap" element={<HospitalMap />} />
+        <Route path="/book-appointment" element={<BookingPage />} />
       </Routes>
     </Router>
   );
