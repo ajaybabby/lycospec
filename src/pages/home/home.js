@@ -9,6 +9,21 @@ const Home = () => {
     { id: 2, name: 'Cardiology', rating: 4.9, doctors: 30 },
     { id: 3, name: 'Neurology', rating: 4.7, doctors: 20 },
     { id: 4, name: 'Pediatrics', rating: 4.8, doctors: 28 },
+    { id: 5, name: 'Orthopedics', rating: 4.6, doctors: 18 },
+    { id: 6, name: 'Gynaecologist', rating: 4.5, doctors: 15 },
+    { id: 7, name: 'Dermatology', rating: 4.4, doctors: 12 },
+    { id: 8, name: 'Psychiatrist', rating: 4.3, doctors: 10 },
+    { id: 9, name: 'ENT', rating: 4.2, doctors: 8 },
+    { id: 10, name: 'Urology', rating: 4.1, doctors: 6 },
+    { id: 11, name: 'Radiology', rating: 4.0, doctors: 4 },
+    { id: 12, name: 'Urology', rating: 4.1, doctors: 6 },
+    { id: 13, name: 'Radiology', rating: 4.0, doctors: 4 },
+
+
+
+
+
+
   ];
 
   return (
@@ -40,21 +55,21 @@ const Home = () => {
         </div>
 
         <div className="cards-row">
-          <div className="nearby-doctors">
-            <div className="map-preview">
-              <h2>Find Doctors Near You</h2>
-              <p>20+ doctors available in your area</p>
-              <Link to="/map" className="view-map-btn">View Map</Link>
-            </div>
-          </div>
-
-          <div className="video-consult">
-            <div className="video-preview">
+          <Link to="/video-consult" className="service-card">
+            <img src="/vedio-consult.jpg" alt="Video Consultation" className="service-image" />
+            <div className="service-content">
               <h2>Instant Video Consultation</h2>
               <p>Connect within 60 secs</p>
-              <Link to="/video-consult" className="view-map-btn">Consult Now</Link>
             </div>
-          </div>
+          </Link>
+
+          <Link to="/hospitalmap" className="service-card">
+            <img src="/map.jpg" alt="Find Doctors" className="service-image" />
+            <div className="service-content">
+              <h2>Find Doctors Near You</h2>
+              <p>Confirmed appointments</p>
+            </div>
+          </Link>
         </div>
 
         <div className="online-consultation">

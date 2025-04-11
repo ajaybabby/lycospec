@@ -1,11 +1,11 @@
 .doctors-hero {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('/public/doctorback.jpg');
+  background-image:
+    url('/public/docback2.jpg');
   background-size: cover;
   background-position: center;
   padding: 4rem 1rem;  /* Increased padding from 2rem to 4rem */
   margin-bottom: 3rem; /* Increased margin from 2rem to 3rem */
-  min-height: 300px;   /* Added minimum height */
+  min-height: 400px;   /* Added minimum height */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,12 +15,37 @@
   max-width: 800px;    /* Increased max-width from 600px to 800px */
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 16px;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+}
+
+.doctors-hero .search-bar select,
+.doctors-hero .search-bar input {
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+}
+
+.doctors-hero .search-bar select {
+  flex: 1;
+  color: #333;
+  cursor: pointer;
 }
 
 .doctors-hero .search-bar input {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 1.2rem;     /* Increased padding for the search input */
-  font-size: 1.1rem;   /* Increased font size */
+  flex: 2;
+}
+
+.doctors-hero .search-bar select:focus,
+.doctors-hero .search-bar input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.8);
 }
 
 .doctors-grid {
@@ -93,4 +118,130 @@
 
 .book-now-btn:hover {
   background: #1976D2;
+}
+
+.filters-section {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+  margin-top: 16px;
+  border-radius: 8px;
+}
+
+.filter-item select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 200px;
+  font-size: 14px;
+}
+
+.doctors-summary {
+  padding: 20px;
+  background: #f8f9fa;
+  margin: 20px 0;
+}
+
+.doctors-summary h2 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.doctors-summary p {
+  color: #666;
+  font-size: 14px;
+}
+
+.doctors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.doctor-list-item {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.doctor-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.doctor-list-content {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.doctor-thumbnail {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.doctor-list-info {
+  flex: 1;
+}
+
+.doctor-list-info h4 {
+  margin: 0 0 8px 0;
+  color: #2196F3;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #666;
+}
+
+.stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.satisfaction {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.doctor-list-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.book-clinic-btn {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.contact-btn {
+  background: #fff;
+  border: 1px solid #2196F3;
+  color: #2196F3;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.view-profile-btn {
+  color: #666;
+  text-decoration: none;
+  padding: 10px 20px;
 }

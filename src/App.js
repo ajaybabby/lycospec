@@ -20,7 +20,7 @@ function App() {
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/doctorlogin" element={<DoctorLogin />} />
         <Route path="/doctordashboard" element={<DoctorDashboard />} />
-        <Route path="/video-consultations" element={<VideoConsultations />} />
+        <Route path="/video-consult" element={<VideoConsultations />} />
         <Route path="/hospitalmap" element={<HospitalMap />} />
       </Routes>
     </Router>
