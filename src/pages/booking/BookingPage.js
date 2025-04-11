@@ -6,6 +6,15 @@ import './BookingPage.css';
 const BookingPage = () => {
   const { doctorId } = useParams();
   const [selectedDate, setSelectedDate] = useState('today');
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [bookingData, setBookingData] = useState({
+    name: '',
+    age: '',
+    gender: '',
+    email: '',
+  });
+  const [errors, setErrors] = useState({});
 
   const doctor = {
     name: 'Dr. N Satish Varma',
@@ -37,6 +46,51 @@ const BookingPage = () => {
       { time: '07:00 PM', available: true }
     ]
   };
+
+  const handleTimeSlotClick = (time) => {
+    setSelectedTime(time);
+    setShowModal(true);
+  };
+
+  const handleInputChange = (e) => {
+    setBookingData({
+      ...bookingData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!bookingData.name.trim()) newErrors.name = 'Name is required';
+    if (!bookingData.age) newErrors.age = 'Age is required';
+    if (!bookingData.gender) newErrors.gender = 'Gender is required';
+    if (!bookingData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(bookingData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleBooking = () => {
+    if (validateForm()) {
+      // Here you would typically make an API call to save the booking
+      console.log('Booking data:', { ...bookingData, time: selectedTime, date: selectedDate });
+      setShowModal(false);
+      // You can add success notification here
+    }
+  };
+
+  // Update the time slot rendering in your existing code:
+  const renderTimeSlot = (slot) => (
+    <button 
+      className="btn btn-outline-secondary w-100"
+      onClick={() => handleTimeSlotClick(slot.time)}
+    >
+      {slot.time}
+    </button>
+  );
 
   return (
     <div className="booking-page container-fluid">
@@ -130,9 +184,7 @@ const BookingPage = () => {
                     <div className="row g-3">
                       {timeSlots.afternoon.map((slot, index) => (
                         <div className="col-4" key={index}>
-                          <button className="btn btn-outline-secondary w-100">
-                            {slot.time}
-                          </button>
+                          {renderTimeSlot(slot)}
                         </div>
                       ))}
                     </div>
@@ -143,9 +195,7 @@ const BookingPage = () => {
                     <div className="row g-3">
                       {timeSlots.evening.map((slot, index) => (
                         <div className="col-4" key={index}>
-                          <button className="btn btn-outline-secondary w-100">
-                            {slot.time}
-                          </button>
+                          {renderTimeSlot(slot)}
                         </div>
                       ))}
                     </div>
@@ -156,6 +206,80 @@ const BookingPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Add Modal here */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="booking-modal">
+            <h3>Book Appointment</h3>
+            <p className="selected-time">Selected Time: {selectedTime}</p>
+            
+            <div className="form-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                name="name"
+                className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                value={bookingData.name}
+                onChange={handleInputChange}
+                placeholder="Enter your full name"
+              />
+              {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+            </div>
+
+            <div className="form-group">
+              <label>Age</label>
+              <input
+                type="number"
+                name="age"
+                className={`form-control ${errors.age ? 'is-invalid' : ''}`}
+                value={bookingData.age}
+                onChange={handleInputChange}
+                placeholder="Enter your age"
+              />
+              {errors.age && <div className="invalid-feedback">{errors.age}</div>}
+            </div>
+
+            <div className="form-group">
+              <label>Gender</label>
+              <select
+                name="gender"
+                className={`form-control ${errors.gender ? 'is-invalid' : ''}`}
+                value={bookingData.gender}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+              {errors.gender && <div className="invalid-feedback">{errors.gender}</div>}
+            </div>
+
+            <div className="form-group">
+              <label>Email Address</label>
+              <input
+                type="email"
+                name="email"
+                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                value={bookingData.email}
+                onChange={handleInputChange}
+                placeholder="Enter your email"
+              />
+              {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+            </div>
+
+            <div className="modal-actions">
+              <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                Cancel
+              </button>
+              <button className="btn btn-primary" onClick={handleBooking}>
+                Book Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

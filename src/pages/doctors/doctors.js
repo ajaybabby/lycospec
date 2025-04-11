@@ -6,8 +6,7 @@ import './doctors.css';
 
 const Doctors = () => {
   const navigate = useNavigate();
-  const [showRegister, setShowRegister] = useState(false);
-  const [selectedDoctorId, setSelectedDoctorId] = useState(null);
+  const [setSelectedDoctorId] = useState(null);
   const [filters, setFilters] = useState({
     hospital: '',
     speciality: ''
@@ -46,20 +45,10 @@ const Doctors = () => {
   ];
 
   const handleBookAppointment = (doctorId) => {
-    if (!isLoggedIn) {
-      setSelectedDoctorId(doctorId);
-      setShowRegister(true);
-      return;
-    }
-    navigate(`/book-appointment/${doctorId}`);
+    
+    navigate(`/book-appointment`);
   };
-  const handleRegister = (formData) => {
-    localStorage.setItem('user', JSON.stringify(formData));
-    setShowRegister(false);
-    if (selectedDoctorId) {
-      navigate(`/book-appointment/${selectedDoctorId}`);
-    }
-  };
+  
   return (
     <div className="app-container">
       <div className="app-header">
@@ -156,12 +145,7 @@ const Doctors = () => {
         </Link>
       </nav>
       
-      {showRegister && (
-        <RegisterPopup
-          onClose={() => setShowRegister(false)}
-          onRegister={handleRegister}
-        />
-      )}
+      
     </div>
   );
 };

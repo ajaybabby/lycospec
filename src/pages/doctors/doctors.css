@@ -5,7 +5,7 @@
   background-position: center;
   padding: 4rem 1rem;  /* Increased padding from 2rem to 4rem */
   margin-bottom: 3rem; /* Increased margin from 2rem to 3rem */
-  min-height: 400px;   /* Added minimum height */
+  min-height: 600px;   /* Added minimum height */
   display: flex;
   align-items: center;
   justify-content: center;
