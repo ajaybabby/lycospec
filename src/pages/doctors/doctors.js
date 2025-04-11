@@ -58,9 +58,8 @@ const Doctors = () => {
           <span className="message-badge">2</span>
         </Link>
       </div>
-
       <div className="main-content">
-      <div className="doctors-hero">
+      <div className="doctor-hero">
           <div className="search-bar">
             <select defaultValue="">
               <option value="">Select Location</option>
