@@ -39,7 +39,7 @@ const BookingPage = () => {
   };
 
   return (
-    <div className="booking-page">
+    <div className="booking-page container-fluid">
       <div className="app-header">
         <img src="/logo.png" alt="LycoSpec" className="app-logo" />
         <Link to="/messages" className="message-icon">
@@ -49,88 +49,108 @@ const BookingPage = () => {
       </div>
 
       <div className="search-section">
-        <div className="search-bar">
-          <select defaultValue="">
-            <option value="">Select Location</option>
-            <option value="vizag">Visakhapatnam</option>
-          </select>
-          <select defaultValue="">
-            <option value="">Select Speciality</option>
-            <option value="dentist">Dentist</option>
-          </select>
-          <input type="text" placeholder="Search doctors, clinics..." />
+        <div className="search-bar row g-2">
+          <div className="col-md-3">
+            <select className="form-select" defaultValue="">
+              <option value="">Select Location</option>
+              <option value="vizag">Visakhapatnam</option>
+            </select>
+          </div>
+          <div className="col-md-3">
+            <select className="form-select" defaultValue="">
+              <option value="">Select Speciality</option>
+              <option value="dentist">Dentist</option>
+            </select>
+          </div>
+          <div className="col-md-6">
+            <input type="text" className="form-control" placeholder="Search doctors, clinics..." />
+          </div>
         </div>
       </div>
 
-      <div className="booking-content">
-        <div className="doctor-details">
-          <div className="doctor-profile">
-            <img src={doctor.image} alt={doctor.name} className="doctor-image" />
-            <div className="doctor-info">
-              <h2>{doctor.name}</h2>
-              <p className="qualification">{doctor.qualification}</p>
-              <p className="specialization">{doctor.specialization}</p>
-              <p className="experience">{doctor.experience}</p>
-              {doctor.verified && (
-                <div className="verification">
-                  <FaCheck className="verify-icon" /> Medical Registration Verified
+      <div className="booking-content container">
+        <div className="row">
+          <div className="col-lg-6">
+            <div className="doctor-details card mb-4">
+              <div className="card-body">
+                <div className="doctor-profile">
+                  <img src={doctor.image} alt={doctor.name} className="doctor-image" />
+                  <div className="doctor-info">
+                    <h2>{doctor.name}</h2>
+                    <p className="qualification">{doctor.qualification}</p>
+                    <p className="specialization">{doctor.specialization}</p>
+                    <p className="experience">{doctor.experience}</p>
+                    {doctor.verified && (
+                      <div className="verification">
+                        <FaCheck className="verify-icon" /> Medical Registration Verified
+                      </div>
+                    )}
+                    <div className="rating-info">
+                      <span className="rating">{doctor.rating}</span>
+                      <span className="patient-count">({doctor.patientCount})</span>
+                    </div>
+                  </div>
                 </div>
-              )}
-              <div className="rating-info">
-                <span className="rating">{doctor.rating}</span>
-                <span className="patient-count">({doctor.patientCount})</span>
+
+                <div className="clinic-info mt-4">
+                  <h3>{doctor.clinic}</h3>
+                  <p className="location">
+                    <FaMapMarkerAlt /> {doctor.location}
+                  </p>
+                  <p className="fee">₹{doctor.fee} Consultation fee</p>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="clinic-info">
-            <h3>{doctor.clinic}</h3>
-            <p className="location">
-              <FaMapMarkerAlt /> {doctor.location}
-            </p>
-            <p className="fee">₹{doctor.fee} Consultation fee</p>
-          </div>
-        </div>
-
-        <div className="appointment-slots">
-          <h3>Pick a time slot</h3>
-          <div className="date-selector">
-            <button 
-              className={selectedDate === 'today' ? 'active' : ''} 
-              onClick={() => setSelectedDate('today')}
-            >
-              Today
-              <span className="slot-count">13 Slots Available</span>
-            </button>
-            <button 
-              className={selectedDate === 'tomorrow' ? 'active' : ''} 
-              onClick={() => setSelectedDate('tomorrow')}
-            >
-              Tomorrow
-              <span className="slot-count">19 Slots Available</span>
-            </button>
-          </div>
-
-          <div className="time-slots">
-            <div className="slot-section">
-              <h4>Afternoon (2 slots)</h4>
-              <div className="slots-grid">
-                {timeSlots.afternoon.map((slot, index) => (
-                  <button key={index} className="time-slot">
-                    {slot.time}
+          <div className="col-lg-6">
+            <div className="appointment-slots card">
+              <div className="card-body">
+                <h3>Pick a time slot</h3>
+                <div className="date-selector d-flex gap-3 mb-4">
+                  <button 
+                    className={`btn btn-outline-primary flex-grow-1 ${selectedDate === 'today' ? 'active' : ''}`}
+                    onClick={() => setSelectedDate('today')}
+                  >
+                    Today
+                    <span className="slot-count d-block">13 Slots Available</span>
                   </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="slot-section">
-              <h4>Evening (11 slots)</h4>
-              <div className="slots-grid">
-                {timeSlots.evening.map((slot, index) => (
-                  <button key={index} className="time-slot">
-                    {slot.time}
+                  <button 
+                    className={`btn btn-outline-primary flex-grow-1 ${selectedDate === 'tomorrow' ? 'active' : ''}`}
+                    onClick={() => setSelectedDate('tomorrow')}
+                  >
+                    Tomorrow
+                    <span className="slot-count d-block">19 Slots Available</span>
                   </button>
-                ))}
+                </div>
+
+                <div className="time-slots">
+                  <div className="slot-section">
+                    <h4 className="mb-3">Afternoon (2 slots)</h4>
+                    <div className="row g-3">
+                      {timeSlots.afternoon.map((slot, index) => (
+                        <div className="col-4" key={index}>
+                          <button className="btn btn-outline-secondary w-100">
+                            {slot.time}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="slot-section mt-4">
+                    <h4 className="mb-3">Evening (11 slots)</h4>
+                    <div className="row g-3">
+                      {timeSlots.evening.map((slot, index) => (
+                        <div className="col-4" key={index}>
+                          <button className="btn btn-outline-secondary w-100">
+                            {slot.time}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
