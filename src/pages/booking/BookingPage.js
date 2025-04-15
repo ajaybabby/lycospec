@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaMapMarkerAlt, FaCheck, FaEnvelope } from 'react-icons/fa';
 import './BookingPage.css';
 
 const BookingPage = () => {
   const location = useLocation();
   const doctorInfo = location.state?.doctorInfo;
+  const navigate = useNavigate();
   
   // Replace the static doctor object with passed data
   const doctor = {
@@ -22,7 +23,7 @@ const BookingPage = () => {
     image: doctorInfo?.image || '/doctor.jpg'
   };
   const { doctorId } = useParams();
-  const [selectedDate, setSelectedDate] = useState('today');
+  const [selectedDate, setSelectedDate] = useState();
   const [showModal, setShowModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
   const [bookingData, setBookingData] = useState({
@@ -53,7 +54,19 @@ const BookingPage = () => {
   };
 
   const handleTimeSlotClick = (time) => {
-    setSelectedTime(time);
+    // Convert 12-hour format to 24-hour format for SQL
+    const [timeValue, period] = time.split(' ');
+    const [hours, minutes] = timeValue.split(':');
+    let formattedHours = parseInt(hours);
+    
+    if (period === 'PM' && formattedHours !== 12) {
+      formattedHours += 12;
+    } else if (period === 'AM' && formattedHours === 12) {
+      formattedHours = 0;
+    }
+
+    const formattedTime = `${formattedHours.toString().padStart(2, '0')}:${minutes}:00`;
+    setSelectedTime(formattedTime); // Store in SQL format (HH:mm:ss)
     setShowModal(true);
   };
 
@@ -106,10 +119,9 @@ const BookingPage = () => {
         const result = await response.json();
         console.log('Booking successful:', result);
         setShowModal(false);
-        // You can add success notification or redirect here
+        navigate('/appointments'); // Redirect to appointments page
       } catch (error) {
         console.error('Booking error:', error);
-        // Handle error - show error message to user
       }
     }
   };

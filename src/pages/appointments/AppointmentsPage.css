@@ -1,0 +1,206 @@
+.appointments-page {
+  padding: 20px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.appointment-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.appointment-card:hover {
+  transform: translateY(-2px);
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.time-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #2196F3;
+  font-weight: 500;
+}
+
+.icon {
+  font-size: 1.2rem;
+  color: #2196F3;
+}
+
+.appointment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.doctor-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.hospital-name {
+  color: #666;
+}
+
+.patient-info {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.appointment-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.btn-reschedule, .btn-cancel {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-reschedule {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-reschedule:hover {
+  background-color: #1976D2;
+}
+
+.btn-cancel {
+  background-color: #fff;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.btn-cancel:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .appointments-page {
+    padding: 10px;
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .appointments-list {
+    gap: 15px;
+    padding: 0 10px;
+  }
+  
+  .appointment-card {
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .appointment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .time-info {
+    width: 100%;
+    justify-content: center;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 6px;
+  }
+  
+  .detail-item {
+    flex-wrap: wrap;
+  }
+  
+  .hospital-name {
+    font-size: 0.9rem;
+  }
+  
+  .appointment-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .btn-reschedule, .btn-cancel {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .appointments-page {
+    padding: 8px;
+  }
+  
+  .page-title {
+    font-size: 1.3rem;
+  }
+  
+  .appointment-card {
+    padding: 12px;
+  }
+  
+  .doctor-name {
+    font-size: 1rem;
+  }
+  
+  .hospital-name {
+    font-size: 0.85rem;
+  }
+  
+  .patient-info {
+    font-size: 0.85rem;
+  }
+}

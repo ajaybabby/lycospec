@@ -10,6 +10,7 @@ import VideoConsultations from './pages/doctorlogin/videoconsultations/videocons
 import HospitalMap from './components/HospitalMap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BookingPage from './pages/booking/BookingPage';
+import AppointmentsPage from './pages/appointments/AppointmentsPage';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
         <Route path="/video-consult" element={<VideoConsultations />} />
         <Route path="/hospitalmap" element={<HospitalMap />} />
         <Route path="/book-appointment" element={<BookingPage />} />
+        // In your routes configuration
+        <Route path="/appointments" element={<AppointmentsPage />} />
       </Routes>
     </Router>
   );
