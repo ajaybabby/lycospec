@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaCrosshairs } from 'react-icons/fa';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
@@ -18,9 +18,35 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+// Add LocationButton component before HospitalMap component
+const LocationButton = ({ setUserLocation }) => {
+  const map = useMap();
+  
+  return (
+    <button 
+      className="current-location-btn"
+      onClick={() => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const userPos = [position.coords.latitude, position.coords.longitude];
+            setUserLocation(userPos);
+            map.flyTo(userPos, 15);
+          });
+        }
+      }}
+    >
+      <FaCrosshairs />
+    </button>
+  );
+};
+
 const HospitalMap = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [nearestHospitals, setNearestHospitals] = useState([]);
+  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [routeCoordinates, setRouteCoordinates] = useState([]);
+  const [routeDistance, setRouteDistance] = useState(null);
+  const [routeDuration, setRouteDuration] = useState(null);
 
   const hospitals = [
     { id: 1, name: "Hope Hospital", position: [17.0005, 81.7799], distance: 0 },
@@ -61,6 +87,29 @@ const HospitalMap = () => {
     }
   };
 
+  const findRoute = async (hospitalPosition) => {
+    if (!userLocation) {
+      alert('Please enable location to find route');
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://router.project-osrm.org/route/v1/driving/${userLocation[1]},${userLocation[0]};${hospitalPosition[1]},${hospitalPosition[0]}?overview=full&geometries=geojson`
+      );
+      const data = await response.json();
+      
+      if (data.routes && data.routes[0]) {
+        setRouteCoordinates(data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]));
+        setSelectedRoute(hospitalPosition);
+        setRouteDistance((data.routes[0].distance / 1000).toFixed(2)); // Convert to km
+        setRouteDuration(Math.round(data.routes[0].duration / 60)); // Convert to minutes
+      }
+    } catch (error) {
+      console.error('Error finding route:', error);
+    }
+  };
+
   return (
     <div className="hospital-map-container">
       <div className="map-section">
@@ -69,6 +118,7 @@ const HospitalMap = () => {
           zoom={13}
           style={{ height: "60vh", width: "100%" }}
         >
+          <LocationButton setUserLocation={setUserLocation} />
           <TileLayer
             url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -78,6 +128,12 @@ const HospitalMap = () => {
             <Marker key={hospital.id} position={hospital.position}>
               <Popup>
                 <strong>{hospital.name}</strong>
+                <button 
+                  className="find-route-btn"
+                  onClick={() => findRoute(hospital.position)}
+                >
+                  Find Route
+                </button>
               </Popup>
             </Marker>
           ))}
@@ -86,7 +142,31 @@ const HospitalMap = () => {
               <Popup>You are here</Popup>
             </Marker>
           )}
+          {routeCoordinates.length > 0 && (
+            <Polyline 
+              positions={routeCoordinates}
+              color="#2196F3"
+              weight={4}
+              opacity={0.7}
+            />
+          )}
         </MapContainer>
+
+        {routeDistance && (
+          <div className="route-info-box">
+            <h4>Route Information</h4>
+            <div className="route-details">
+              <div className="route-item">
+                <FaMapMarkerAlt />
+                <span>Distance: {routeDistance} km</span>
+              </div>
+              <div className="route-item">
+                <i className="far fa-clock"></i>
+                <span>Duration: {routeDuration} mins</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <button className="find-hospital-btn" onClick={findNearestHospitals}>
           <FaMapMarkerAlt /> Find Hospitals Near Me
