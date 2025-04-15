@@ -3,22 +3,27 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaHome, FaUser, FaCalendarAlt, FaBell, FaEnvelope, FaMapMarkerAlt, FaFilter } from 'react-icons/fa';
 import RegisterPopup from '../../components/RegisterPopup';
 import './doctors.css';
+import { useLocation } from 'react-router-dom';  // Add this import at the top
 
 const Doctors = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Initialize selectedSpeciality with the value from navigation state
+  const [selectedSpeciality, setSelectedSpeciality] = useState(location.state?.selectedSpeciality || '');
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
+
   const [filters, setFilters] = useState({
     hospital: '',
     speciality: ''
   });
   const isLoggedIn = localStorage.getItem('user') !== null;
 
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [selectedSpeciality, setSelectedSpeciality] = useState('');
-  const [filteredDoctors, setFilteredDoctors] = useState([]);
-
+ 
   useEffect(() => {
     fetchDoctors();
   }, []);

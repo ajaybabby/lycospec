@@ -125,42 +125,43 @@ const Home = () => {
             <div className="clinic-consultation">
               <h2 className="section-title">Book an appointment in clinics</h2>
               <div className="clinic-scroll">
-                <Link to="/doctors" className="clinic-card">
+                <Link to="/doctors" state={{ selectedSpeciality: "Dentist" }} className="clinic-card">
                   <div className="clinic-content">
                     <img src="dentist.jpg" alt="Dentist" className="clinic-image" />
                     <h3>Dentist</h3>
                     <p>Teeth troubles & dental care</p>
                   </div>
                 </Link>
-                <Link to="/doctors" className="clinic-card">
+                <Link to="/doctors" state={{ selectedSpeciality: "Orthopedics" }} className="clinic-card">
                   <div className="clinic-content">
                     <img src="orthopedic.jpg" alt="Orthopedic" className="clinic-image" />
                     <h3>Orthopedic</h3>
                     <p>Bone & joint issues</p>
                   </div>
                 </Link>
-                <Link to="/doctors" className="clinic-card">
+                {/* Update remaining clinic cards similarly */}
+                <Link to="/doctors" state={{ selectedSpeciality: "Cardiology" }} className="clinic-card">
                   <div className="clinic-content">
                     <img src="cardiologist.jpg" alt="Cardiologist" className="clinic-image" />
                     <h3>Cardiologist</h3>
                     <p>Heart & blood pressure</p>
                   </div>
                 </Link>
-                <Link to="/doctors" className="clinic-card">
+                <Link to="/doctors"  state={{ selectedSpeciality: "Pediatrics" }} className="clinic-card">
                   <div className="clinic-content">
                     <img src="pediatrician.jpg" alt="Pediatrician" className="clinic-image" />
                     <h3>Pediatrician</h3>
                     <p>Child specialists</p>
                   </div>
                 </Link>
-                <Link to="/doctors" className="clinic-card">
+                <Link to="/doctors"state={{ selectedSpeciality: "Gynecology" }} className="clinic-card">
                   <div className="clinic-content">
                     <img src="gynic.jpg" alt="Gynecologist" className="clinic-image" />
                     <h3>Gynecologist</h3>
                     <p>Women's health</p>
                   </div>
                 </Link>
-                <Link to="/doctors" className="clinic-card">
+                <Link to="/doctors" state={{ selectedSpeciality: "Neurology" }} className="clinic-card">
                   <div className="clinic-content">
                     <img src="neuro.jpg" alt="Neurologist" className="clinic-image" />
                     <h3>Neurologist</h3>
