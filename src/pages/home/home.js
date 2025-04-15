@@ -77,42 +77,42 @@ const Home = () => {
           <p className="section-subtitle">Private online consultations with verified doctors</p>
           
           <div className="consult-scroll">
-            <Link to="/consult/pregnancy" className="consult-card">
+            <Link to="/consultation" className="consult-card">
               <div className="consult-content">
                 <img src="peroid.jpg" alt="Pregnancy" className="consult-image" />
                 <h3>Period doubts or Pregnancy</h3>
                 <button className="consult-btn">CONSULT NOW</button>
               </div>
             </Link>
-            <Link to="/consult/skin" className="consult-card">
+            <Link to="/consultation" className="consult-card">
               <div className="consult-content">
                 <img src="skin.jpg" alt="Skin Care" className="consult-image" />
                 <h3>Acne, pimple or skin issues</h3>
                 <button className="consult-btn">CONSULT NOW</button>
               </div>
             </Link>
-            <Link to="/consult/performance" className="consult-card">
+            <Link to="/consultation" className="consult-card">
               <div className="consult-content">
                 <img src="performance.jpg" alt="Performance" className="consult-image" />
                 <h3>Performance issues in bed</h3>
                 <button className="consult-btn">CONSULT NOW</button>
               </div>
             </Link>
-            <Link to="/consult/cold" className="consult-card">
+            <Link to="/consultation" className="consult-card">
               <div className="consult-content">
                 <img src="cold.png" alt="Cold" className="consult-image" />
                 <h3>Cold, cough or fever</h3>
                 <button className="consult-btn">CONSULT NOW</button>
               </div>
             </Link>
-            <Link to="/consult/child" className="consult-card">
+            <Link to="/consultation" className="consult-card">
               <div className="consult-content">
                 <img src="child.jpg" alt="Child" className="consult-image" />
                 <h3>Child not feeling well</h3>
                 <button className="consult-btn">CONSULT NOW</button>
               </div>
             </Link>
-            <Link to="/consult/mental" className="consult-card">
+            <Link to="/consultation" className="consult-card">
               <div className="consult-content">
                 <img src="mental.jpg" alt="Mental" className="consult-image" />
                 <h3>Depression or anxiety</h3>
@@ -125,14 +125,14 @@ const Home = () => {
             <div className="clinic-consultation">
               <h2 className="section-title">Book an appointment in clinics</h2>
               <div className="clinic-scroll">
-                <Link to="/clinic/dentist" className="clinic-card">
+                <Link to="/consultation" className="clinic-card">
                   <div className="clinic-content">
                     <img src="dentist.jpg" alt="Dentist" className="clinic-image" />
                     <h3>Dentist</h3>
                     <p>Teeth troubles & dental care</p>
                   </div>
                 </Link>
-                <Link to="/clinic/orthopedic" className="clinic-card">
+                <Link to="/consultation" className="clinic-card">
                   <div className="clinic-content">
                     <img src="orthopedic.jpg" alt="Orthopedic" className="clinic-image" />
                     <h3>Orthopedic</h3>
@@ -146,21 +146,21 @@ const Home = () => {
                     <p>Heart & blood pressure</p>
                   </div>
                 </Link>
-                <Link to="/clinic/pediatrician" className="clinic-card">
+                <Link to="/consultation" className="clinic-card">
                   <div className="clinic-content">
                     <img src="pediatrician.jpg" alt="Pediatrician" className="clinic-image" />
                     <h3>Pediatrician</h3>
                     <p>Child specialists</p>
                   </div>
                 </Link>
-                <Link to="/clinic/gynecologist" className="clinic-card">
+                <Link to="/consultation" className="clinic-card">
                   <div className="clinic-content">
                     <img src="gynic.jpg" alt="Gynecologist" className="clinic-image" />
                     <h3>Gynecologist</h3>
                     <p>Women's health</p>
                   </div>
                 </Link>
-                <Link to="/clinic/neurologist" className="clinic-card">
+                <Link to="/consultation" className="clinic-card">
                   <div className="clinic-content">
                     <img src="neuro.jpg" alt="Neurologist" className="clinic-image" />
                     <h3>Neurologist</h3>

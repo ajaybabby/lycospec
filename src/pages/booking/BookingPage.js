@@ -1,9 +1,26 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { FaMapMarkerAlt, FaCheck, FaEnvelope } from 'react-icons/fa';
 import './BookingPage.css';
 
 const BookingPage = () => {
+  const location = useLocation();
+  const doctorInfo = location.state?.doctorInfo;
+  
+  // Replace the static doctor object with passed data
+  const doctor = {
+    name: doctorInfo?.name || 'N/A',
+    qualification: doctorInfo?.qualification || 'N/A',
+    specialization: doctorInfo?.specialization || 'N/A',
+    experience: doctorInfo?.experience || 'N/A',
+    verified: true,
+    rating: '99%',
+    patientCount: '441 patients',
+    clinic: doctorInfo?.hospital || 'N/A',
+    location: doctorInfo?.area || 'N/A',
+    fee: `₹${doctorInfo?.consultationFee || 'N/A'}`,
+    image: doctorInfo?.image || '/doctor.jpg'
+  };
   const { doctorId } = useParams();
   const [selectedDate, setSelectedDate] = useState('today');
   const [showModal, setShowModal] = useState(false);
@@ -16,19 +33,7 @@ const BookingPage = () => {
   });
   const [errors, setErrors] = useState({});
 
-  const doctor = {
-    name: 'Dr. N Satish Varma',
-    qualification: 'BDS, MDS - Orthodontics',
-    specialization: 'Orthodontist',
-    experience: '28 Years Experience Overall',
-    verified: true,
-    rating: '99%',
-    patientCount: '441 patients',
-    clinic: 'Smiles Dental Clinic',
-    location: 'Dwarakanagar',
-    fee: '₹200',
-    image: '/doctor.jpg'
-  };
+  
 
   const timeSlots = {
     afternoon: [
@@ -73,12 +78,39 @@ const BookingPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (validateForm()) {
-      // Here you would typically make an API call to save the booking
-      console.log('Booking data:', { ...bookingData, time: selectedTime, date: selectedDate });
-      setShowModal(false);
-      // You can add success notification here
+      try {
+        const bookingDetails = {
+          doctor_id: doctorInfo?.id,
+          appointment_date: selectedDate,
+          time_slot: selectedTime,
+          patient_name: bookingData.name,
+          patient_age: bookingData.age,
+          patient_gender: bookingData.gender,
+          patient_email: bookingData.email
+        };
+
+        const response = await fetch('http://localhost:5000/api/book-appointment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bookingDetails)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to book appointment');
+        }
+
+        const result = await response.json();
+        console.log('Booking successful:', result);
+        setShowModal(false);
+        // You can add success notification or redirect here
+      } catch (error) {
+        console.error('Booking error:', error);
+        // Handle error - show error message to user
+      }
     }
   };
 
@@ -131,7 +163,6 @@ const BookingPage = () => {
                   <img src={doctor.image} alt={doctor.name} className="doctor-image" />
                   <div className="doctor-info">
                     <h2>{doctor.name}</h2>
-                    <p className="qualification">{doctor.qualification}</p>
                     <p className="specialization">{doctor.specialization}</p>
                     <p className="experience">{doctor.experience}</p>
                     {doctor.verified && (
@@ -151,7 +182,7 @@ const BookingPage = () => {
                   <p className="location">
                     <FaMapMarkerAlt /> {doctor.location}
                   </p>
-                  <p className="fee">₹{doctor.fee} Consultation fee</p>
+                  <p className="fee">{doctor.fee} Consultation fee</p>
                 </div>
               </div>
             </div>
