@@ -127,7 +127,10 @@ const Doctors = () => {
         </Link>
       </div>
       <div className="main-content">
-      <div className="doctor-hero">
+        <div className="speciality-header">
+          <h1>{selectedSpeciality || 'Doctors'}</h1>
+        </div>
+        <div className="doctor-hero">
           <div className="search-bar">
             <select 
               value={selectedLocation} 
