@@ -47,28 +47,36 @@
 
 .input-icon {
   position: relative;
+  display: flex;
+  align-items: center;
+  background: #f5f7fa;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
 
 .input-icon .icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  position: static;
+  padding: 0 12px;
   color: #666;
+  transform: none;
 }
 
 .input-icon input {
   width: 100%;
-  padding: 12px 12px 12px 40px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 12px;
+  border: none;
+  border-radius: 0 8px 8px 0;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  background: white;
 }
 
 .input-icon input:focus {
-  border-color: #2196F3;
   outline: none;
+}
+
+.input-with-button .input-icon {
+  flex: 1;
+  margin-right: 0;
 }
 
 .form-options {
@@ -135,4 +143,50 @@
     gap: 1rem;
     align-items: flex-start;
   }
+}
+
+
+.input-with-button {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+}
+
+.input-with-button .input-icon {
+  flex: 1;
+}
+
+.send-otp-button,
+.verify-otp-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(to right, #4CAF50, #45a049);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.send-otp-button:hover,
+.verify-otp-button:hover {
+  background: linear-gradient(to right, #45a049, #409444);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.send-otp-button:disabled,
+.verify-otp-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.input-icon input {
+  width: 100%;
+  padding-right: 40px;
 }
