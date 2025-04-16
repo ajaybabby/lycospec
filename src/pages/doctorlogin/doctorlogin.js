@@ -32,7 +32,7 @@ const DoctorLogin = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ contact: formData.emailOrPhone })
+        body: JSON.stringify({ email: formData.emailOrPhone, userType: 'doctor' })
       });
 
       if (response.ok) {
@@ -55,7 +55,8 @@ const DoctorLogin = () => {
         },
         body: JSON.stringify({
           email: formData.emailOrPhone,
-          otp: formData.otp
+          otp: formData.otp,
+          userType: 'doctor'
         })
       });
 

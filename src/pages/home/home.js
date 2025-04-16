@@ -16,25 +16,96 @@ const Home = () => {
     gender: ''
   });
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (isRegistering) {
-      // Handle registration
-      if (registerData.name && registerData.phone && registerData.age && registerData.gender) {
-        setShowLoginModal(false);
-        setIsRegistering(false);
-        setRegisterData({ name: '', phone: '', age: '', gender: '' });
-      }
-    } else if (loginStep === 'input') {
-      if (contactInfo.trim()) {
+  // Add these functions near the top of your component
+  const sendLoginOTP = async (email) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email ,userType:'patient'}),
+      });
+      const data = await response.json();
+      if (data.success) {
         setLoginStep('otp');
+      } else {
+        alert('Failed to send OTP. Please try again.');
       }
-    } else {
-      if (otp.trim()) {
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      alert('Failed to send OTP. Please try again.');
+    }
+  };
+
+  const verifyOTP = async (email, otp) => {
+    try {
+      const response = await fetch('http://localhost:3001/api/auth/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, otp }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        // Store token if provided
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
         setShowLoginModal(false);
         setLoginStep('input');
         setContactInfo('');
         setOtp('');
+      } else {
+        alert('Invalid OTP. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      alert('Failed to verify OTP. Please try again.');
+    }
+  };
+
+  const registerUser = async (userData) => {
+    try {
+      const response = await fetch('http://localhost:3001/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      const data = await response.json();
+      if (data.success) {
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
+        setShowLoginModal(false);
+        setIsRegistering(false);
+        setRegisterData({ name: '', phone: '', age: '', gender: '' });
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error registering:', error);
+      alert('Registration failed. Please try again.');
+    }
+  };
+
+  // Update handleLogin function
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (isRegistering) {
+      if (registerData.name && registerData.phone && registerData.age && registerData.gender) {
+        await registerUser(registerData);
+      }
+    } else if (loginStep === 'input') {
+      if (contactInfo.trim()) {
+        await sendLoginOTP(contactInfo);
+      }
+    } else {
+      if (otp.trim()) {
+        await verifyOTP(contactInfo, otp);
       }
     }
   };
