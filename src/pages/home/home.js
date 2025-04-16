@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaCalendarAlt, FaBell, FaEnvelope } from 'react-icons/fa';
 import './home.css';
 
 const Home = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);  // Add this line
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.search-wrapper')) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
   const specializations = [
     { id: 1, name: 'Oncology', rating: 4.8, doctors: 25 },
     { id: 2, name: 'Cardiology', rating: 4.9, doctors: 30 },
@@ -26,19 +50,48 @@ const Home = () => {
 
   ];
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.search-wrapper')) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
   return (
     <div className="app-container">
-      <div className="app-header">
+      <div className={`app-header ${isScrolled ? 'scrolled' : ''}`}>
         <img src="/logo.png" alt="LycoSpec" className="app-logo" />
-        <Link to="/messages" className="message-icon">
-          <FaEnvelope />
-          <span className="message-badge">2</span>
-        </Link>
+        {isScrolled && (
+          <input
+            type="text"
+            placeholder="Search doctors, specializations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input-header"
+          />
+        )}
+        <div className="header-right">
+          <Link to="/doctors" className="header-link">Doctors</Link>
+          <Link to="/messages" className="message-icon">
+            <FaEnvelope />
+            <span className="message-badge">2</span>
+          </Link>
+          <Link to="/login" className="login-link">Login</Link>
+        </div>
       </div>
 
       <div className="main-content">
-        <div className="search-bar">
-          <input type="text" placeholder="Search doctors, specializations..." />
+        <div className={`search-container ${isScrolled ? 'hidden' : ''}`}>
+          <input
+            type="text"
+            placeholder="Search doctors, specializations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
         </div>
 
         <h2 className="section-title">Specializations</h2>

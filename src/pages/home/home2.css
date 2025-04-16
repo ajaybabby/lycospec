@@ -1,3 +1,59 @@
+.page-container {
+  min-height: 100vh;
+}
+
+.app-header {
+  padding: 15px 20px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.app-header.scrolled {
+  padding: 10px 20px;
+}
+
+.search-input-header {
+  margin-left: 20px;
+  flex: 1;
+  max-width: 400px;
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.search-container {
+  transition: opacity 0.3s ease;
+}
+
+.search-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.specializations-container {
+  padding-top: 80px;
+}
+
+/* Adjust your existing styles as needed */
+.app-logo {
+  height: 40px;
+  object-fit: contain;
+}
+
+/* Adjust existing container to account for header */
+.specializations-container {
+  padding-top: 20px;
+}
+
 .specializations-container {
   padding: 2rem;
   max-width: 1400px;

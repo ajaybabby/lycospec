@@ -1,8 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './home2.css';
 
 const Home2 = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const specializations = [
     {
@@ -68,29 +80,44 @@ const Home2 = () => {
   );
 
   return (
-    <div className="specializations-container">
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search specializations..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
+    <div className="page-container">
+      <div className={`app-header ${isScrolled ? 'scrolled' : ''}`}>
+        <img src="/logo.png" alt="LycoSpec" className="app-logo" />
+        {isScrolled && (
+          <input
+            type="text"
+            placeholder="Search specializations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input-header"
+          />
+        )}
       </div>
 
-      <div className="specializations-grid">
-        {filteredSpecializations.map((spec) => (
-          <div className="specialization-card" key={spec.id}>
-            <div className="card-color-bar" style={{ backgroundColor: spec.color }}></div>
-            <h3>{spec.title}</h3>
-            <p>{spec.description}</p>
-            <div className="card-footer">
-              <span className="cases">{spec.cases}</span>
-              <button className="explore-btn">Explore</button>
+      <div className="specializations-container">
+        <div className={`search-container ${isScrolled ? 'hidden' : ''}`}>
+          <input
+            type="text"
+            placeholder="Search specializations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+        </div>
+
+        <div className="specializations-grid">
+          {filteredSpecializations.map((spec) => (
+            <div className="specialization-card" key={spec.id}>
+              <div className="card-color-bar" style={{ backgroundColor: spec.color }}></div>
+              <h3>{spec.title}</h3>
+              <p>{spec.description}</p>
+              <div className="card-footer">
+                <span className="cases">{spec.cases}</span>
+                <button className="explore-btn">Explore</button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
