@@ -6,7 +6,41 @@ import './home.css';
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);  // Add this line
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [registerData, setRegisterData] = useState({
+    name: '',
+    phone: '',
+    age: '',
+    gender: ''
+  });
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (isRegistering) {
+      // Handle registration
+      if (registerData.name && registerData.phone && registerData.age && registerData.gender) {
+        setShowLoginModal(false);
+        setIsRegistering(false);
+        setRegisterData({ name: '', phone: '', age: '', gender: '' });
+      }
+    } else if (loginStep === 'input') {
+      if (contactInfo.trim()) {
+        setLoginStep('otp');
+      }
+    } else {
+      if (otp.trim()) {
+        setShowLoginModal(false);
+        setLoginStep('input');
+        setContactInfo('');
+        setOtp('');
+      }
+    }
+  };
+  const [loginStep, setLoginStep] = useState('input');
+  const [contactInfo, setContactInfo] = useState('');
+  const [otp, setOtp] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,9 +113,99 @@ const Home = () => {
             <FaEnvelope />
             <span className="message-badge">2</span>
           </Link>
-          <Link to="/login" className="login-link">Login</Link>
+          <button onClick={() => setShowLoginModal(true)} className="login-link">Login</button>
         </div>
       </div>
+
+      {showLoginModal && (
+        <div className="login-modal-overlay">
+          <div className="login-modal">
+            <button className="close-btn" onClick={() => {
+              setShowLoginModal(false);
+              setLoginStep('input');
+              setIsRegistering(false);
+            }}>×</button>
+            <img src="/logo.png" alt="LycoSpec" className="modal-logo" />
+            <h2>{isRegistering ? 'Create Account' : (loginStep === 'input' ? 'Welcome Back' : 'Verify OTP')}</h2>
+            <form onSubmit={handleLogin}>
+              {isRegistering ? (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Full Name"
+                    value={registerData.name}
+                    onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
+                    className="login-input"
+                    required
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={registerData.phone}
+                    onChange={(e) => setRegisterData({...registerData, phone: e.target.value})}
+                    className="login-input"
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder="Age"
+                    value={registerData.age}
+                    onChange={(e) => setRegisterData({...registerData, age: e.target.value})}
+                    className="login-input"
+                    required
+                    min="1"
+                    max="120"
+                  />
+                  <select
+                    value={registerData.gender}
+                    onChange={(e) => setRegisterData({...registerData, gender: e.target.value})}
+                    className="login-input"
+                    required
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </>
+              ) : (
+                loginStep === 'input' ? (
+                  <input
+                    type="text"
+                    placeholder="Enter Email or Phone"
+                    value={contactInfo}
+                    onChange={(e) => setContactInfo(e.target.value)}
+                    className="login-input"
+                    required
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    placeholder="Enter OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="login-input"
+                    required
+                    maxLength="6"
+                  />
+                )
+              )}
+              <button type="submit" className="login-submit-btn">
+                {isRegistering ? 'Create Account' : (loginStep === 'input' ? 'Continue' : 'Verify OTP')}
+              </button>
+              {loginStep === 'input' && (
+                <button 
+                  type="button" 
+                  className="switch-auth-btn"
+                  onClick={() => setIsRegistering(!isRegistering)}
+                >
+                  {isRegistering ? 'Already have an account? Sign in' : 'New to LycoSpec? Create account'}
+                </button>
+              )}
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="main-content">
         <div className={`search-container ${isScrolled ? 'hidden' : ''}`}>
@@ -207,7 +331,7 @@ const Home = () => {
                     <p>Child specialists</p>
                   </div>
                 </Link>
-                <Link to="/doctors"state={{ selectedSpeciality: "Gynecology" }} className="clinic-card">
+                <Link to="/doctors"state={{ selectedSpeciality: "Gynaecology" }} className="clinic-card">
                   <div className="clinic-content">
                     <img src="gynic.jpg" alt="Gynecologist" className="clinic-image" />
                     <h3>Gynecologist</h3>
