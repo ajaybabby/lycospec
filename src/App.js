@@ -11,6 +11,7 @@ import HospitalMap from './components/HospitalMap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BookingPage from './pages/booking/BookingPage';
 import AppointmentsPage from './pages/appointments/AppointmentsPage';
+import ProfilePage from './pages/profile/ProfilePage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/book-appointment" element={<BookingPage />} />
         // In your routes configuration
         <Route path="/appointments" element={<AppointmentsPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );
