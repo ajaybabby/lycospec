@@ -9,11 +9,14 @@ const Home = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  // Update the registerData state
   const [registerData, setRegisterData] = useState({
     name: '',
     phone: '',
     age: '',
-    gender: ''
+    gender: '',
+    aadhar: '',
+    email: ''
   });
 
   // Add these functions near the top of your component
@@ -40,12 +43,12 @@ const Home = () => {
 
   const verifyOTP = async (email, otp) => {
     try {
-      const response = await fetch('http://localhost:3001/api/auth/verify-otp', {
+      const response = await fetch('http://localhost:5000/api/verify-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, otp }),
+        body: JSON.stringify({ email, otp,userType:'patient' }),
       });
       const data = await response.json();
       if (data.success) {
@@ -68,7 +71,7 @@ const Home = () => {
 
   const registerUser = async (userData) => {
     try {
-      const response = await fetch('http://localhost:3001/api/auth/register', {
+      const response = await fetch('http://localhost:5000/api/register-patient', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,12 +80,15 @@ const Home = () => {
       });
       const data = await response.json();
       if (data.success) {
-        if (data.token) {
-          localStorage.setItem('token', data.token);
-        }
         setShowLoginModal(false);
         setIsRegistering(false);
         setRegisterData({ name: '', phone: '', age: '', gender: '' });
+        // Show success message and prompt to login
+        alert(`Registration successful! Welcome ${data.data.name}. Please login to continue.`);
+        // Reopen modal for login after a short delay
+        setTimeout(() => {
+          setShowLoginModal(true);
+        }, 1000);
       } else {
         alert('Registration failed. Please try again.');
       }
@@ -210,12 +216,30 @@ const Home = () => {
                     required
                   />
                   <input
+                    type="email"
+                    placeholder="Email Address"
+                    value={registerData.email}
+                    onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                    className="login-input"
+                    required
+                  />
+                  <input
                     type="tel"
                     placeholder="Phone Number"
                     value={registerData.phone}
                     onChange={(e) => setRegisterData({...registerData, phone: e.target.value})}
                     className="login-input"
                     required
+                  />
+                  <input
+                    type="text"
+                    placeholder="Aadhar Number"
+                    value={registerData.aadhar}
+                    onChange={(e) => setRegisterData({...registerData, aadhar: e.target.value})}
+                    className="login-input"
+                    required
+                    maxLength="12"
+                    pattern="[0-9]{12}"
                   />
                   <input
                     type="number"
