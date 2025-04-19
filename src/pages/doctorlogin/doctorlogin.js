@@ -59,18 +59,18 @@ const DoctorLogin = () => {
           userType: 'doctor'
         })
       });
-
+     
       const data = await response.json();
 
       if (response.ok && data.success) {
         setIsOtpVerified(true);
         setError('');
-        // Store doctor data in localStorage for persistence
+        // Store doctor ID and token in localStorage
+        localStorage.setItem('doctorId', data.data.id);
+        localStorage.setItem('token', data.data.token);
         localStorage.setItem('doctorData', JSON.stringify(data.data));
-        // Redirect to dashboard with doctor ID
-        navigate(`/doctordashboard`, { 
-          state: { doctorData: data.data }
-        });
+        // Navigate to dashboard with doctor data
+        navigate('/doctordashboard');
       } else {
         setError('Invalid OTP. Please try again.');
       }

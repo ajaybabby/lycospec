@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import BookingPage from './pages/booking/BookingPage';
 import AppointmentsPage from './pages/appointments/AppointmentsPage';
 import ProfilePage from './pages/profile/ProfilePage';
+import DoctorVideoCall from './pages/doctorlogin/doctordashboard/DoctorVideoCall';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         // In your routes configuration
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/doctor/video-call/:requestId" element={<DoctorVideoCall />} />
       </Routes>
     </Router>
   );
