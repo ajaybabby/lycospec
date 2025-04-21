@@ -320,11 +320,8 @@ const Home = () => {
             <div className="inner">
               {[...specializations, ...specializations].map((spec, index) => (
                 <div key={`${spec.id}-${index}`} className="tag">
-                  <span>★</span> {spec.name}
-                  <div className="spec-info">
-                    <span className="rating">{spec.rating}</span>
-                    <span className="doctor-count">{spec.doctors} Doctors</span>
-                  </div>
+                  <span></span>
+                  {spec.name}
                 </div>
               ))}
             </div>
@@ -333,12 +330,8 @@ const Home = () => {
             <div className="inner">
               {[...specializations, ...specializations].map((spec, index) => (
                 <div key={`${spec.id}-${index}`} className="tag">
-                  <span>★</span>
-                  <div>{spec.name}</div>
-                  <div className="spec-info">
-                    <span className="rating">{spec.rating}</span>
-                    <span>{spec.doctors}</span>
-                  </div>
+                  <span></span>
+                  {spec.name}
                 </div>
               ))}
             </div>
