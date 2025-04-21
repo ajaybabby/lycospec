@@ -104,7 +104,7 @@ const BookingPage = () => {
           patient_email: bookingData.email
         };
 
-        const response = await fetch('https://lyco.loca.lt/api/book-appointment', {
+        const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/book-appointment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -27,7 +27,7 @@ const DoctorLogin = () => {
       return;
     }
     try {
-      const response = await fetch('https://lyco.loca.lt/api/send-otp', {
+      const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/send-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const DoctorLogin = () => {
 
   const verifyOTP = async () => {
     try {
-      const response = await fetch('https://lyco.loca.lt/api/verify-otp', {
+      const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/verify-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ const DoctorLogin = () => {
       return;
     }
     try {
-      const response = await fetch('https://lyco.loca.lt/api/doctor-login', {
+      const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/doctor-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

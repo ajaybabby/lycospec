@@ -34,7 +34,7 @@ const DoctorDashboard = () => {
     }
 
     try {
-      const response = await fetch(`https://lyco.loca.lt/appoint/doctor/${storedDoctorData.id}/appointments`, {
+      const response = await fetch(`https://councils-mrna-flashers-mentioned.trycloudflare.com/appoint/doctor/${storedDoctorData.id}/appointments`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -102,7 +102,7 @@ const DoctorDashboard = () => {
     }
 
     try {
-      const response = await fetch(`https://lyco.loca.lt/api/doctor/${storedDoctorData.id}/video-requests`, {
+      const response = await fetch(`https://councils-mrna-flashers-mentioned.trycloudflare.com/api/doctor/${storedDoctorData.id}/video-requests`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -149,7 +149,7 @@ const DoctorDashboard = () => {
 
   const handleAppointmentAction = async (id, action) => {
     try {
-      const response = await fetch(`https://lyco.loca.lt/api/appointments/${id}/status`, {
+      const response = await fetch(`https://councils-mrna-flashers-mentioned.trycloudflare.com/api/appointments/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const DoctorDashboard = () => {
 
   const handleVideoRequest = async (requestId, action) => {
     try {
-      const response = await fetch(`https://lyco.loca.lt/api/video-call/${requestId}/${action}`, {
+      const response = await fetch(`https://councils-mrna-flashers-mentioned.trycloudflare.com/api/video-call/${requestId}/${action}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`

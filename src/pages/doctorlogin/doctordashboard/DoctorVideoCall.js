@@ -83,7 +83,7 @@ const DoctorVideoCall = () => {
 
   const sendToSignalingServer = (data) => {
     // Implement your signaling server communication here
-    fetch('https://lyco.loca.lt/api/signaling', {
+    fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/signaling', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

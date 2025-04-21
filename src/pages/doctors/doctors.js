@@ -80,7 +80,7 @@ const Doctors = () => {
   const fetchDoctors = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://lyco.loca.lt/api/getdoctors');
+      const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/getdoctors');
       if (!response.ok) {
         throw new Error('Failed to fetch doctors');
       }

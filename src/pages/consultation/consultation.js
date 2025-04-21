@@ -18,7 +18,7 @@ const Consultation = () => {
 
   const fetchDoctors = async () => {
     try {
-      const response = await fetch('https://lyco.loca.lt/api/video-enabled');
+      const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/video-enabled');
       const data = await response.json();
       if (data.success) {
         setDoctors(data.data); // Changed from data.doctors to data.data
@@ -39,7 +39,7 @@ const Consultation = () => {
       if (callRequestId) {
         statusCheck = setInterval(async () => {
           try {
-            const response = await fetch(`https://lyco.loca.lt/api/video-call/status/${callRequestId}`);
+            const response = await fetch(`https://councils-mrna-flashers-mentioned.trycloudflare.com/api/video-call/status/${callRequestId}`);
             const data = await response.json();
             if (data.success) {
               setCallStatus(data.status);
@@ -57,7 +57,7 @@ const Consultation = () => {
   
     const handleConnectClick = async (doctor) => {
       try {
-        const response = await fetch('https://lyco.loca.lt/api/video-call/request', {
+        const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/video-call/request', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
