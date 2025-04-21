@@ -776,3 +776,118 @@ select.login-input {
 .switch-auth-btn:hover {
   color: #007bff;
 }
+.tag-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  position: relative;
+  padding: 1rem 0;
+  overflow: hidden;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  min-width: 180px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e9ecef;
+}
+
+.tag span {
+  color: #ffa41b;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.tag .spec-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-left: auto;
+}
+
+.tag .rating {
+  color: #ffa41b;
+}
+
+.fade {
+  background: linear-gradient(90deg, #ffffff, transparent 10%, transparent 90%, #ffffff);
+}
+
+.loop-slider {
+  position: relative;
+}
+
+.loop-slider .inner {
+  display: flex;
+  width: fit-content;
+  animation-name: loop;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: var(--direction);
+  animation-duration: var(--duration);
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2d3748;
+  font-size: 1rem;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  margin-right: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.tag:hover {
+  transform: translateY(-5px);
+}
+
+.tag span {
+  color: #4a5568;
+  font-size: 1.2rem;
+}
+
+.tag .spec-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.fade {
+  pointer-events: none;
+  background: linear-gradient(90deg, #ffffff, transparent 15%, transparent 85%, #ffffff);
+  position: absolute;
+  inset: 0;
+}
+
+@keyframes loop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .tag {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .tag .spec-info {
+    font-size: 0.7rem;
+  }
+}

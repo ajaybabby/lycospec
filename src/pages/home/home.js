@@ -313,17 +313,37 @@ const Home = () => {
           />
         </div>
 
+
         <h2 className="section-title">Specializations</h2>
-        <div className="specialization-scroll">
-          {specializations.map(spec => (
-            <div key={spec.id} className="spec-card">
-              <h3>{spec.name}</h3>
-              <div className="spec-info">
-                <span className="rating">★ {spec.rating}</span>
-                <span className="doctor-count">{spec.doctors} Doctors</span>
-              </div>
+        <div className="tag-list">
+          <div className="loop-slider" style={{ '--duration': '25000ms', '--direction': 'normal' }}>
+            <div className="inner">
+              {[...specializations, ...specializations].map((spec, index) => (
+                <div key={`${spec.id}-${index}`} className="tag">
+                  <span>★</span> {spec.name}
+                  <div className="spec-info">
+                    <span className="rating">{spec.rating}</span>
+                    <span className="doctor-count">{spec.doctors} Doctors</span>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <div className="loop-slider" style={{ '--duration': '30000ms', '--direction': 'reverse' }}>
+            <div className="inner">
+              {[...specializations, ...specializations].map((spec, index) => (
+                <div key={`${spec.id}-${index}`} className="tag">
+                  <span>★</span>
+                  <div>{spec.name}</div>
+                  <div className="spec-info">
+                    <span className="rating">{spec.rating}</span>
+                    <span>{spec.doctors}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="fade"></div>
         </div>
 
         <div className="cards-row">
