@@ -27,7 +27,7 @@ const DoctorLogin = () => {
       return;
     }
     try {
-      const response = await fetch('http://localhost:5000/api/send-otp', {
+      const response = await fetch('https://lyco.loca.lt/api/send-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const DoctorLogin = () => {
 
   const verifyOTP = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/verify-otp', {
+      const response = await fetch('https://lyco.loca.lt/api/verify-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ const DoctorLogin = () => {
       return;
     }
     try {
-      const response = await fetch('http://localhost:5000/api/doctor-login', {
+      const response = await fetch('https://lyco.loca.lt/api/doctor-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

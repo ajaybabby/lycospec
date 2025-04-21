@@ -13,7 +13,7 @@ const AppointmentsPage = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await fetch('http://localhost:5000/appoint/appointments');
+      const response = await fetch('https://lyco.loca.lt/appoint/appointments');
       const result = await response.json();
       if (result.success) {
         setAppointments(result.data);

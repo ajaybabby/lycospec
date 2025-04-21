@@ -83,7 +83,7 @@ const DoctorVideoCall = () => {
 
   const sendToSignalingServer = (data) => {
     // Implement your signaling server communication here
-    fetch('http://localhost:5000/api/signaling', {
+    fetch('https://lyco.loca.lt/api/signaling', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

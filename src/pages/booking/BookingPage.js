@@ -104,7 +104,7 @@ const BookingPage = () => {
           patient_email: bookingData.email
         };
 
-        const response = await fetch('http://localhost:5000/api/book-appointment', {
+        const response = await fetch('https://lyco.loca.lt/api/book-appointment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
