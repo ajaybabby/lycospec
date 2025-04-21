@@ -107,20 +107,41 @@ const Consultation = () => {
             </Link>
           </div>
 
-          <div className="consultation-hero">
+          <div className="consultation-hero-section">
             <div className="hero-content">
-              <h1>Online Doctor Consultation</h1>
-              <p>Private online consultations with verified doctors</p>
-              <div className="search-container">
-                <div className="search-box">
-                  <FaSearch className="search-icon" />
-                  <input 
-                    type="text" 
-                    placeholder="Search doctors, specialties..." 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
+              <h1 className="animate-slide-down">
+                Online Doctor <span className="highlight">Consultation</span>
+              </h1>
+              <p className="hero-subtitle animate-fade-in">
+                Connect with Expert Doctors Instantly via Video Call
+              </p>
+            </div>
+            
+            <div className="search-container animate-slide-up">
+              <div className="search-box">
+                <FaSearch className="search-icon" />
+                <input 
+                  type="text" 
+                  placeholder="Search doctors, specialties..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+              </div>
+            </div>
+
+            <div className="quick-stats animate-fade-in">
+              <div className="stat-item">
+                <span className="stat-number">{doctors.length}</span>
+                <span className="stat-label">Online Doctors</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">₹299</span>
+                <span className="stat-label">Starting from</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">4.8★</span>
+                <span className="stat-label">User Rating</span>
               </div>
             </div>
           </div>
