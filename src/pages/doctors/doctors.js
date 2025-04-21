@@ -118,6 +118,7 @@ const Doctors = () => {
   }
 
   return (
+    // Update the header and search section
     <div className="app-container">
       <div className="app-header">
         <img src="/logo.png" alt="LycoSpec" className="app-logo" />
@@ -127,34 +128,73 @@ const Doctors = () => {
         </Link>
       </div>
       <div className="main-content">
-        <div className="speciality-header">
-          <h1>{selectedSpeciality || 'Doctors'}</h1>
+        <div className="doctor-hero-section">
+          <div className="hero-content">
+            <h1 className="animate-slide-down">
+              {selectedSpeciality ? (
+                <>
+                  Best <span className="highlight">{selectedSpeciality}</span> Doctors
+                </>
+              ) : (
+                'Find the Right Doctor'
+              )}
+            </h1>
+            <p className="hero-subtitle animate-fade-in">
+              Book appointments with verified doctors
+            </p>
+          </div>
+          
+          <div className="search-container animate-slide-up">
+            <div className="search-box">
+              <FaMapMarkerAlt className="search-icon" />
+              <select 
+                value={selectedLocation} 
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                className="location-select"
+              >
+                <option value="">Select Location</option>
+                {areas.map(area => (
+                  <option key={area} value={area}>{area}</option>
+                ))}
+              </select>
+            </div>
+  
+            <div className="search-box">
+              <FaUser className="search-icon" />
+              <select 
+                value={selectedSpeciality} 
+                onChange={(e) => setSelectedSpeciality(e.target.value)}
+                className="speciality-select"
+              >
+                <option value="">Select Speciality</option>
+                {specializations.map(spec => (
+                  <option key={spec} value={spec}>{spec}</option>
+                ))}
+              </select>
+            </div>
+  
+            <button className="search-button">
+              <FaFilter /> Filter
+            </button>
+          </div>
         </div>
-        <div className="doctor-hero">
-          <div className="search-bar">
-            <select 
-              value={selectedLocation} 
-              onChange={(e) => setSelectedLocation(e.target.value)}
-            >
-              <option value="">Select Location</option>
-              {areas.map(area => (
-                <option key={area} value={area}>{area}</option>
-              ))}
-            </select>
-            <select 
-              value={selectedSpeciality} 
-              onChange={(e) => setSelectedSpeciality(e.target.value)}
-            >
-              <option value="">Select Speciality</option>
-              {specializations.map(spec => (
-                <option key={spec} value={spec}>{spec}</option>  // Will display exact specialization_name from API
-              ))}
-            </select>
-            <input type="text" placeholder="Search doctors, clinics..." />
+  
+        <div className="quick-stats animate-fade-in">
+          <div className="stat-item">
+            <span className="stat-number">{filteredDoctors.length}</span>
+            <span className="stat-label">Available Doctors</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">4.8</span>
+            <span className="stat-label">Average Rating</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">24/7</span>
+            <span className="stat-label">Support</span>
           </div>
         </div>
 
-
+        {/* Remove the duplicate sections and directly show doctors summary */}
         <div className="doctors-summary">
           <h2>{filteredDoctors.length} Doctors available {selectedLocation && `in ${selectedLocation}`}</h2>
           <p>Book appointments with minimum wait-time & verified doctor details</p>
