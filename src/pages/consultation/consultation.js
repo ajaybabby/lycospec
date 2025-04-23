@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaCalendarAlt, FaBell, FaEnvelope, FaSearch, FaVideo } from 'react-icons/fa';
-import VideoConference from '../../components/VideoConference';
+import VideoConference from '../../components/VideoConference.js';
 import './consultation.css';
 
 const Consultation = () => {
@@ -45,14 +45,25 @@ const Consultation = () => {
               setCallStatus(data.status);
               if (data.status === 'accepted') {
                 clearInterval(statusCheck);
+                joinCall(); // Automatically join call when accepted
+              } else if (data.status === 'rejected' || data.status === 'cancelled') {
+                clearInterval(statusCheck);
+                setCallRequestId(null);
+                alert(`Call was ${data.status}`);
               }
             }
           } catch (error) {
             console.error('Error checking call status:', error);
+            clearInterval(statusCheck);
+            setCallRequestId(null);
           }
-        }, 3000);
+        }, 3000); // Check every 3 seconds
       }
-      return () => clearInterval(statusCheck);
+      return () => {
+        if (statusCheck) {
+          clearInterval(statusCheck);
+        }
+      };
     }, [callRequestId]);
   
     const handleConnectClick = async (doctor) => {
@@ -61,17 +72,18 @@ const Consultation = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
           },
-          body: JSON.stringify({ doctorId: doctor.id, patientId: 4 })
+          body: JSON.stringify({ doctorId: doctor.id })
         });
         const data = await response.json();
         if (data.success) {
           setCallRequestId(data.requestId);
           setSelectedDoctor(doctor.id);
+          setCallStatus('pending');
           alert('Call request sent. Waiting for doctor to accept...');
         } else {
-          alert('Failed to connect with doctor. Please try again.');
+          alert(data.message || 'Failed to connect with doctor. Please try again.');
         }
       } catch (error) {
         console.error('Error connecting to doctor:', error);

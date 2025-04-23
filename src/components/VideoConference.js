@@ -70,7 +70,7 @@ const VideoConference = ({ onClose, doctorId }) => {
 
   const sendOffer = async (offer) => {
     try {
-      const response = await fetch('http://localhost:5000/api/webrtc/offer', {
+      const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/webrtc/offer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const VideoConference = ({ onClose, doctorId }) => {
 
   const sendIceCandidate = async (candidate) => {
     try {
-      await fetch('http://localhost:5000/api/webrtc/ice-candidate', {
+      await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/webrtc/ice-candidate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
