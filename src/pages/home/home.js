@@ -9,6 +9,15 @@ const Home = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  // Add these two new state variables
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  // Add useEffect to check auth status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
   // Update the registerData state
   const [registerData, setRegisterData] = useState({
     name: '',
@@ -41,6 +50,32 @@ const Home = () => {
     }
   };
 
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('patientToken');
+    const storedName = localStorage.getItem('patientName');
+    if (token) {
+      // Check if token is expired
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.exp * 1000 > Date.now()) {
+          setIsLoggedIn(true);
+          setUserName(storedName);
+        } else {
+          handleLogout();
+        }
+      } catch (error) {
+        handleLogout();
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('patientToken');
+    localStorage.removeItem('patientName');
+    setIsLoggedIn(false);
+    setUserName('');
+  };
+
   const verifyOTP = async (email, otp) => {
     try {
       const response = await fetch('http://localhost:5000/api/verify-otp', {
@@ -48,14 +83,15 @@ const Home = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, otp,userType:'patient' }),
+        body: JSON.stringify({ email, otp, userType: 'patient' }),
       });
       const data = await response.json();
       if (data.success) {
-        // Store token if provided
-        if (data.token) {
-          localStorage.setItem('token', data.token);
-        }
+        // Store token and user data
+        localStorage.setItem('patientToken', data.token);
+        localStorage.setItem('patientName', data.data.name);
+        setIsLoggedIn(true);
+        setUserName(data.data.name);
         setShowLoginModal(false);
         setLoginStep('input');
         setContactInfo('');
@@ -190,7 +226,16 @@ const Home = () => {
             <FaEnvelope />
             <span className="message-badge">2</span>
           </Link>
-          <button onClick={() => setShowLoginModal(true)} className="login-link">Login</button>
+          {isLoggedIn ? (
+            <div className="user-menu">
+              <span className="user-name">{userName}</span>
+              <button onClick={handleLogout} className="logout-btn">Logout</button>
+            </div>
+          ) : (
+            <button onClick={() => setShowLoginModal(true)} className="login-link">
+              Login
+            </button>
+          )}
         </div>
       </div>
 
