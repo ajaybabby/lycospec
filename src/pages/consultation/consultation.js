@@ -6,11 +6,12 @@ import './consultation.css';
 
 const Consultation = () => {
   const [showVideoCall, setShowVideoCall] = useState(false);
-  // Initialize doctors state with empty array
   const [doctors, setDoctors] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [callStatus, setCallStatus] = useState(null);
+  const [callRequestId, setCallRequestId] = useState(null);
 
   useEffect(() => {
     fetchDoctors();
@@ -21,7 +22,7 @@ const Consultation = () => {
       const response = await fetch('http://localhost:5000/api/video-enabled');
       const data = await response.json();
       if (data.success) {
-        setDoctors(data.data); // Changed from data.doctors to data.data
+        setDoctors(data.data);
       }
       setLoading(false);
     } catch (error) {
@@ -30,72 +31,127 @@ const Consultation = () => {
     }
   };
 
-  const [callStatus, setCallStatus] = useState(null);
-    const [callRequestId, setCallRequestId] = useState(null);
-  
-    // Add this new effect to check call status
-    useEffect(() => {
-      let statusCheck;
-      if (callRequestId) {
-        statusCheck = setInterval(async () => {
-          try {
-            const response = await fetch(`http://localhost:5000/api/video-call/status/${callRequestId}`);
-            const data = await response.json();
-            if (data.success) {
-              setCallStatus(data.status);
-              if (data.status === 'accepted') {
-                clearInterval(statusCheck);
-                joinCall(); // Automatically join call when accepted
-              } else if (data.status === 'rejected' || data.status === 'cancelled') {
-                clearInterval(statusCheck);
-                setCallRequestId(null);
-                alert(`Call was ${data.status}`);
-              }
+  useEffect(() => {
+    let statusCheck;
+    if (callRequestId) {
+      statusCheck = setInterval(async () => {
+        try {
+          const response = await fetch(`http://localhost:5000/api/video-call/status/${callRequestId}`);
+          const data = await response.json();
+          if (data.success) {
+            setCallStatus(data.status);
+            if (data.status === 'accepted') {
+              clearInterval(statusCheck);
+              joinCall();
+            } else if (data.status === 'rejected' || data.status === 'cancelled') {
+              clearInterval(statusCheck);
+              setCallRequestId(null);
+              alert(`Call was ${data.status}`);
             }
-          } catch (error) {
-            console.error('Error checking call status:', error);
-            clearInterval(statusCheck);
-            setCallRequestId(null);
           }
-        }, 3000); // Check every 3 seconds
-      }
-      return () => {
-        if (statusCheck) {
+        } catch (error) {
+          console.error('Error checking call status:', error);
           clearInterval(statusCheck);
+          setCallRequestId(null);
         }
-      };
-    }, [callRequestId]);
-  
-    const handleConnectClick = async (doctor) => {
-      try {
-        const response = await fetch('http://localhost:5000/api/video-call/request', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
-          },
-          body: JSON.stringify({ doctorId: doctor.id })
-        });
-        const data = await response.json();
-        if (data.success) {
-          setCallRequestId(data.requestId);
-          setSelectedDoctor(doctor.id);
-          setCallStatus('pending');
-          alert('Call request sent. Waiting for doctor to accept...');
-        } else {
-          alert(data.message || 'Failed to connect with doctor. Please try again.');
-        }
-      } catch (error) {
-        console.error('Error connecting to doctor:', error);
-        alert('Failed to connect. Please try again.');
+      }, 3000);
+    }
+    return () => {
+      if (statusCheck) {
+        clearInterval(statusCheck);
       }
     };
-  
-    const joinCall = () => {
-      setShowVideoCall(true);
-    };
-  
-  // Update the filter logic with null check
+  }, [callRequestId]);
+
+  const handleConnectClick = async (doctor) => {
+    const patientToken = localStorage.getItem('patientToken');
+    console.log('Retrieved token:', patientToken); // Check if token exists
+
+    if (!patientToken) {
+      alert('Please login to request a video call');
+      return;
+    }
+
+    try {
+      // Detailed token decoding logs
+      const tokenParts = patientToken.split('.');
+      console.log('Token parts:', tokenParts);
+      
+      if (tokenParts.length !== 3) {
+        console.error('Invalid token format');
+        alert('Invalid authentication token');
+        return;
+      }
+
+      const decodedPayload = atob(tokenParts[1]);
+      console.log('Decoded payload:', decodedPayload);
+      
+      const tokenPayload = JSON.parse(decodedPayload);
+      console.log('Token payload:', tokenPayload);
+
+      // Try different possible ID fields
+      const patientId = tokenPayload.userId || tokenPayload.user_id || tokenPayload.id || tokenPayload.patientId;
+      console.log('Extracted patient ID:', patientId);
+
+      if (!patientId) {
+        console.error('No patient ID found in token');
+        alert('Authentication error: Patient ID not found');
+        return;
+      }
+
+      const requestData = { 
+        doctorId: doctor.id,
+        patientId: patientId
+      };
+      
+      console.log('Final request data:', requestData);
+
+      const response = await fetch('http://localhost:5000/api/video-call/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${patientToken}`
+        },
+        body: JSON.stringify(requestData)
+      });
+      const data = await response.json();
+      console.log('Response data:', data); // Log the response
+
+      if (data.success) {
+        setCallRequestId(data.requestId);
+        setSelectedDoctor(doctor.id);
+        setCallStatus('pending');
+        alert('Call request sent. Waiting for doctor to accept...');
+      } else {
+        alert(data.message || 'Failed to connect with doctor. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error connecting to doctor:', error);
+      alert('Failed to connect. Please try again.');
+    }
+  };
+
+  const joinCall = () => {
+    setShowVideoCall(true);
+  };
+
+  const checkCallStatus = async () => {
+    if (!callRequestId) {
+      alert('No active call request');
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:5000/api/video-call/status/${callRequestId}`);
+      const data = await response.json();
+      if (data.success) {
+        alert(`Call status: ${data.status}`);
+      }
+    } catch (error) {
+      console.error('Error checking call status:', error);
+      alert('Failed to check call status');
+    }
+  };
+
   const filteredDoctors = doctors?.filter(doctor => 
     doctor?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     doctor?.specialization_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -192,6 +248,14 @@ const Consultation = () => {
                           >
                             <FaVideo /> {callStatus === 'pending' ? 'Waiting...' : 'Start Consultation'}
                           </button>
+                          {callStatus === 'pending' && selectedDoctor === doctor.id && (
+                            <button 
+                              className="status-btn"
+                              onClick={checkCallStatus}
+                            >
+                              Check Status
+                            </button>
+                          )}
                           <button 
                             className="request-btn"
                             onClick={() => handleConnectClick(doctor)}
