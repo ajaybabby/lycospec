@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaMapMarkerAlt, FaCheck, FaEnvelope } from 'react-icons/fa';
 import './BookingPage.css';
@@ -53,8 +53,37 @@ const BookingPage = () => {
     ]
   };
 
+  // Add these state variables at the top with other states
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [patientId, setPatientId] = useState(null);
+
+  // Add this function after other state declarations
+  // Add useEffect to check token on component mount
+  useEffect(() => {
+    checkPatientLogin();
+  }, []);
+
+  const checkPatientLogin = () => {
+    const token = localStorage.getItem('patientToken');
+    console.log('Raw token:', token); // Log the raw token
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Decoded token payload:', payload);
+        setIsLoggedIn(true);
+        setPatientId(payload.patientId);
+        console.log('Extracted patient ID:', payload.patientId);
+      } catch (error) {
+        console.error('Token decoding error:', error);
+        console.log('Invalid token content:', token);
+      }
+    } else {
+      console.log('No token found in localStorage');
+    }
+  };
+
+  // Modify handleTimeSlotClick to include login check
   const handleTimeSlotClick = (time) => {
-    // Convert 12-hour format to 24-hour format for SQL
     const [timeValue, period] = time.split(' ');
     const [hours, minutes] = timeValue.split(':');
     let formattedHours = parseInt(hours);
@@ -66,7 +95,8 @@ const BookingPage = () => {
     }
 
     const formattedTime = `${formattedHours.toString().padStart(2, '0')}:${minutes}:00`;
-    setSelectedTime(formattedTime); // Store in SQL format (HH:mm:ss)
+    setSelectedTime(formattedTime);
+    checkPatientLogin(); // Check login status
     setShowModal(true);
   };
 
@@ -92,19 +122,21 @@ const BookingPage = () => {
   };
 
   const handleBooking = async () => {
-    if (validateForm()) {
+    if (isLoggedIn || validateForm()) {
       try {
         const bookingDetails = {
           doctor_id: doctorInfo?.id,
           appointment_date: selectedDate,
           time_slot: selectedTime,
-          patient_name: bookingData.name,
-          patient_age: bookingData.age,
-          patient_gender: bookingData.gender,
-          patient_email: bookingData.email
+          ...(isLoggedIn ? { patient_id: patientId } : {
+            patient_name: bookingData.name,
+            patient_age: bookingData.age,
+            patient_gender: bookingData.gender,
+            patient_email: bookingData.email
+          })
         };
 
-        const response = await fetch('http://localhost:5000/api/book-appointment', {
+        const response = await fetch('http://localhost:5000/appoint/book-appointment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -119,14 +151,13 @@ const BookingPage = () => {
         const result = await response.json();
         console.log('Booking successful:', result);
         setShowModal(false);
-        navigate('/appointments'); // Redirect to appointments page
+        navigate('/appointments');
       } catch (error) {
         console.error('Booking error:', error);
       }
     }
   };
 
-  // Update the time slot rendering in your existing code:
   const renderTimeSlot = (slot) => (
     <button 
       className="btn btn-outline-secondary w-100"
@@ -257,60 +288,26 @@ const BookingPage = () => {
             <h3>Book Appointment</h3>
             <p className="selected-time">Selected Time: {selectedTime}</p>
             
-            <div className="form-group">
-              <label>Full Name</label>
-              <input
-                type="text"
-                name="name"
-                className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                value={bookingData.name}
-                onChange={handleInputChange}
-                placeholder="Enter your full name"
-              />
-              {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-            </div>
-
-            <div className="form-group">
-              <label>Age</label>
-              <input
-                type="number"
-                name="age"
-                className={`form-control ${errors.age ? 'is-invalid' : ''}`}
-                value={bookingData.age}
-                onChange={handleInputChange}
-                placeholder="Enter your age"
-              />
-              {errors.age && <div className="invalid-feedback">{errors.age}</div>}
-            </div>
-
-            <div className="form-group">
-              <label>Gender</label>
-              <select
-                name="gender"
-                className={`form-control ${errors.gender ? 'is-invalid' : ''}`}
-                value={bookingData.gender}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-              {errors.gender && <div className="invalid-feedback">{errors.gender}</div>}
-            </div>
-
-            <div className="form-group">
-              <label>Email Address</label>
-              <input
-                type="email"
-                name="email"
-                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                value={bookingData.email}
-                onChange={handleInputChange}
-                placeholder="Enter your email"
-              />
-              {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-            </div>
+            {!isLoggedIn ? (
+              // Show full form for non-logged in users
+              <div className="form-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                  value={bookingData.name}
+                  onChange={handleInputChange}
+                  placeholder="Enter your full name"
+                />
+                {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+              </div>
+            ) : (
+              // Show only patient ID for logged in users
+              <div className="logged-in-confirmation">
+                <p>Patient ID: lyco{patientId}</p>
+              </div>
+            )}
 
             <div className="modal-actions">
               <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
