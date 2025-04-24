@@ -4,6 +4,7 @@ import { FaHome, FaUser, FaCalendarAlt, FaBell, FaEnvelope, FaSearch, FaVideo } 
 import VideoConference from '../../components/VideoConference.js';
 import './consultation.css';
 
+
 const Consultation = () => {
   const [showVideoCall, setShowVideoCall] = useState(false);
   const [doctors, setDoctors] = useState([]);
@@ -13,6 +14,22 @@ const Consultation = () => {
   const [callStatus, setCallStatus] = useState(null);
   const [callRequestId, setCallRequestId] = useState(null);
 
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+
+  
+  // Rest of your component remains the same, but update the doctor card buttons to:
+  <div className="action-buttons">
+    <button 
+      className="connect-btn"
+      onClick={() => handleConnectClick(doctor)}
+    >
+      <FaVideo /> Start Consultation
+    </button>
+  </div>
   useEffect(() => {
     fetchDoctors();
   }, []);
