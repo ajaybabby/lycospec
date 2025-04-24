@@ -11,25 +11,10 @@ const Consultation = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
+  // Add these missing state variables
   const [callStatus, setCallStatus] = useState(null);
   const [callRequestId, setCallRequestId] = useState(null);
 
-
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
-
-  
-  // Rest of your component remains the same, but update the doctor card buttons to:
-  <div className="action-buttons">
-    <button 
-      className="connect-btn"
-      onClick={() => handleConnectClick(doctor)}
-    >
-      <FaVideo /> Start Consultation
-    </button>
-  </div>
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -48,105 +33,28 @@ const Consultation = () => {
     }
   };
 
-  // Remove this entire useEffect block that does automatic status checking
-  /* useEffect(() => {
-    let statusCheck;
-    if (callRequestId) {
-      statusCheck = setInterval(async () => {
-        try {
-          const response = await fetch(`http://localhost:5000/api/video-call/status/${callRequestId}`);
-          const data = await response.json();
-          if (data.success) {
-            setCallStatus(data.status);
-            if (data.status === 'accepted') {
-              clearInterval(statusCheck);
-              joinCall();
-            } else if (data.status === 'rejected' || data.status === 'cancelled') {
-              clearInterval(statusCheck);
-              setCallRequestId(null);
-              alert(`Call was ${data.status}`);
-            }
-          }
-        } catch (error) {
-          console.error('Error checking call status:', error);
-          clearInterval(statusCheck);
-          setCallRequestId(null);
-        }
-      }, 3000);
-    }
-    return () => {
-      if (statusCheck) {
-        clearInterval(statusCheck);
-      }
-    };
-  }, [callRequestId]); */
-
   const handleConnectClick = async (doctor) => {
     const patientToken = localStorage.getItem('patientToken');
-    console.log('Retrieved token:', patientToken); // Check if token exists
-
     if (!patientToken) {
-      alert('Please login to request a video call');
+      alert('Please login to start consultation');
       return;
     }
 
     try {
-      // Detailed token decoding logs
-      const tokenParts = patientToken.split('.');
-      console.log('Token parts:', tokenParts);
-      
-      if (tokenParts.length !== 3) {
-        console.error('Invalid token format');
-        alert('Invalid authentication token');
-        return;
-      }
-
-      const decodedPayload = atob(tokenParts[1]);
-      console.log('Decoded payload:', decodedPayload);
-      
-      const tokenPayload = JSON.parse(decodedPayload);
-      console.log('Token payload:', tokenPayload);
-
-      // Try different possible ID fields
+      const tokenPayload = JSON.parse(atob(patientToken.split('.')[1]));
       const patientId = tokenPayload.userId || tokenPayload.user_id || tokenPayload.id || tokenPayload.patientId;
-      console.log('Extracted patient ID:', patientId);
-
+      
       if (!patientId) {
-        console.error('No patient ID found in token');
         alert('Authentication error: Patient ID not found');
         return;
       }
 
-      const requestData = { 
-        doctorId: doctor.id,
-        patientId: patientId
-      };
+      setSelectedDoctor(doctor.id);
+      setShowVideoCall(true);
       
-      console.log('Final request data:', requestData);
-
-      const response = await fetch('http://localhost:5000/api/video-call/request', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${patientToken}`
-        },
-        body: JSON.stringify(requestData)
-      });
-      const data = await response.json();
-      console.log('Response data:', data);
-
-      if (data.success) {
-        console.log('Setting call request ID:', data.data.id); // Log the correct ID path
-        setCallRequestId(data.data.id); // Update to use the correct path data.data.id
-        setSelectedDoctor(doctor.id);
-        setCallStatus('pending');
-        alert('Call request sent. Waiting for doctor to accept...');
-      } else {
-        alert(data.message || 'Failed to connect with doctor. Please try again.');
-      }
     } catch (error) {
-      console.error('Error connecting to doctor:', error);
-      alert('Failed to connect. Please try again.');
+      console.error('Error starting consultation:', error);
+      alert('Failed to start consultation. Please try again.');
     }
   };
 
@@ -283,9 +191,8 @@ const Consultation = () => {
                           <button 
                             className="connect-btn"
                             onClick={() => handleConnectClick(doctor)}
-                            disabled={callStatus === 'pending'}
                           >
-                            <FaVideo /> {callStatus === 'pending' ? 'Waiting...' : 'Start Consultation'}
+                            <FaVideo /> Start Consultation
                           </button>
                           {callStatus === 'pending' && selectedDoctor === doctor.id && (
                             <button 
