@@ -31,7 +31,8 @@ const Consultation = () => {
     }
   };
 
-  useEffect(() => {
+  // Remove this entire useEffect block that does automatic status checking
+  /* useEffect(() => {
     let statusCheck;
     if (callRequestId) {
       statusCheck = setInterval(async () => {
@@ -61,7 +62,7 @@ const Consultation = () => {
         clearInterval(statusCheck);
       }
     };
-  }, [callRequestId]);
+  }, [callRequestId]); */
 
   const handleConnectClick = async (doctor) => {
     const patientToken = localStorage.getItem('patientToken');
@@ -115,10 +116,11 @@ const Consultation = () => {
         body: JSON.stringify(requestData)
       });
       const data = await response.json();
-      console.log('Response data:', data); // Log the response
+      console.log('Response data:', data);
 
       if (data.success) {
-        setCallRequestId(data.requestId);
+        console.log('Setting call request ID:', data.data.id); // Log the correct ID path
+        setCallRequestId(data.data.id); // Update to use the correct path data.data.id
         setSelectedDoctor(doctor.id);
         setCallStatus('pending');
         alert('Call request sent. Waiting for doctor to accept...');
@@ -136,15 +138,35 @@ const Consultation = () => {
   };
 
   const checkCallStatus = async () => {
+    console.log('Checking call status...');
+    console.log('Call Request ID:', callRequestId);
+    
     if (!callRequestId) {
       alert('No active call request');
       return;
     }
+
     try {
-      const response = await fetch(`http://localhost:5000/api/video-call/status/${callRequestId}`);
+      const patientToken = localStorage.getItem('patientToken');
+      const response = await fetch(`http://localhost:5000/api/video-call/status/${callRequestId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${patientToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
       const data = await response.json();
+      console.log('Status check response data:', data);
+
       if (data.success) {
-        alert(`Call status: ${data.status}`);
+        console.log('Call status:', data.data.status);
+        if (data.data.status === 'accepted') {
+          setCallStatus('accepted');
+          setShowVideoCall(true);
+        } else {
+          alert(`Call status: ${data.data.status}`);
+        }
       }
     } catch (error) {
       console.error('Error checking call status:', error);
@@ -256,13 +278,6 @@ const Consultation = () => {
                               Check Status
                             </button>
                           )}
-                          <button 
-                            className="request-btn"
-                            onClick={() => handleConnectClick(doctor)}
-                            disabled={callStatus === 'pending'}
-                          >
-                            Request Video Call
-                          </button>
                         </>
                       )}
                     </div>

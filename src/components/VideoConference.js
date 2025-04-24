@@ -1,169 +1,104 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './VideoConference.css';
+import io from 'socket.io-client';
 
-const VideoConference = ({ onClose, doctorId }) => {
+const VideoConference = ({ doctorId, onClose }) => {
+  const [connectionStatus, setConnectionStatus] = useState('Connecting...');
   const localVideoRef = useRef();
   const remoteVideoRef = useRef();
-  const peerConnection = useRef(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isCameraOff, setIsCameraOff] = useState(false);
+  const peerConnectionRef = useRef();
+  const socketRef = useRef();
 
   useEffect(() => {
-    initializeWebRTC();
-    return () => {
-      if (peerConnection.current) {
-        peerConnection.current.close();
-      }
-      stopVideo();
+    socketRef.current = io('http://localhost:5000');
+    
+    socketRef.current.on('connect', () => {
+      setConnectionStatus('Socket Connected');
+      console.log('Socket connected:', socketRef.current.id);
+    });
+
+    socketRef.current.on('error', (error) => {
+      console.error('Socket error:', error);
+      setConnectionStatus('Connection Error');
+    });
+
+    socketRef.current.on('user-connected', ({ userId }) => {
+      console.log('User connected:', userId);
+      setConnectionStatus('Peer Connected');
+    });
+
+    const configuration = {
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        // Add TURN servers for production
+      ]
     };
-  }, []);
+    peerConnectionRef.current = new RTCPeerConnection(configuration);
 
-  const initializeWebRTC = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: true, 
-        audio: true 
-      });
-      
-      if (localVideoRef.current) {
+    // 3. Get local media stream
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
         localVideoRef.current.srcObject = stream;
-      }
-
-      // Create RTCPeerConnection
-      peerConnection.current = new RTCPeerConnection({
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun1.l.google.com:19302' }
-        ]
+        stream.getTracks().forEach(track => {
+          peerConnectionRef.current.addTrack(track, stream);
+        });
       });
 
-      // Add local stream to peer connection
-      stream.getTracks().forEach(track => {
-        peerConnection.current.addTrack(track, stream);
-      });
+    // 4. Handle incoming remote stream
+    peerConnectionRef.current.ontrack = (event) => {
+      remoteVideoRef.current.srcObject = event.streams[0];
+    };
 
-      // Handle incoming remote stream
-      peerConnection.current.ontrack = (event) => {
-        if (remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = event.streams[0];
-        }
-      };
+    // 5. Socket event handlers
+    socketRef.current.emit('join-room', { doctorId });
 
-      // Handle ICE candidates
-      peerConnection.current.onicecandidate = (event) => {
-        if (event.candidate) {
-          // Send ICE candidate to signaling server
-          sendIceCandidate(event.candidate);
-        }
-      };
-
-      // Create and send offer
-      const offer = await peerConnection.current.createOffer();
-      await peerConnection.current.setLocalDescription(offer);
-      sendOffer(offer);
-
-    } catch (err) {
-      console.error('Error initializing WebRTC:', err);
-    }
-  };
-
-  const sendOffer = async (offer) => {
-    try {
-      const response = await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/webrtc/offer', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          doctorId,
-          offer
-        })
-      });
-      const data = await response.json();
-      if (data.success && data.answer) {
-        await peerConnection.current.setRemoteDescription(new RTCSessionDescription(data.answer));
-      }
-    } catch (error) {
-      console.error('Error sending offer:', error);
-    }
-  };
-
-  const sendIceCandidate = async (candidate) => {
-    try {
-      await fetch('https://councils-mrna-flashers-mentioned.trycloudflare.com/api/webrtc/ice-candidate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          doctorId,
-          candidate
-        })
-      });
-    } catch (error) {
-      console.error('Error sending ICE candidate:', error);
-    }
-  };
-
-  const toggleMute = () => {
-    const stream = localVideoRef.current.srcObject;
-    stream.getAudioTracks().forEach(track => {
-      track.enabled = !track.enabled;
+    socketRef.current.on('offer', async (offer) => {
+      await peerConnectionRef.current.setRemoteDescription(offer);
+      const answer = await peerConnectionRef.current.createAnswer();
+      await peerConnectionRef.current.setLocalDescription(answer);
+      socketRef.current.emit('answer', { answer, doctorId });
     });
-    setIsMuted(!isMuted);
-  };
 
-  const toggleCamera = () => {
-    const stream = localVideoRef.current.srcObject;
-    stream.getVideoTracks().forEach(track => {
-      track.enabled = !track.enabled;
+    socketRef.current.on('answer', async (answer) => {
+      await peerConnectionRef.current.setRemoteDescription(answer);
     });
-    setIsCameraOff(!isCameraOff);
-  };
 
-  const stopVideo = () => {
-    if (localVideoRef.current && localVideoRef.current.srcObject) {
-      localVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
-    }
-  };
+    socketRef.current.on('ice-candidate', async (candidate) => {
+      await peerConnectionRef.current.addIceCandidate(candidate);
+    });
+
+    // 6. Handle ICE candidates
+    peerConnectionRef.current.onicecandidate = (event) => {
+      if (event.candidate) {
+        socketRef.current.emit('ice-candidate', {
+          candidate: event.candidate,
+          doctorId
+        });
+      }
+    };
+
+    return () => {
+      if (localVideoRef.current?.srcObject) {
+        localVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      }
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close();
+      }
+    };
+  }, [doctorId]);
 
   return (
     <div className="video-conference">
+      <div className="status-bar">
+        <span>{connectionStatus}</span>
+      </div>
       <div className="video-container">
-        <video 
-          ref={localVideoRef} 
-          autoPlay 
-          playsInline 
-          muted 
-          className="local-video"
-        />
-        <video 
-          ref={remoteVideoRef} 
-          autoPlay 
-          playsInline 
-          className="remote-video"
-        />
+        <video ref={localVideoRef} autoPlay muted playsInline />
+        <video ref={remoteVideoRef} autoPlay playsInline />
       </div>
-      <div className="controls">
-        <button 
-          className={`control-btn mic-btn ${isMuted ? 'off' : ''}`}
-          onClick={toggleMute}
-        >
-          <i className={`fas fa-microphone${isMuted ? '-slash' : ''}`}></i>
-        </button>
-        <button 
-          className={`control-btn camera-btn ${isCameraOff ? 'off' : ''}`}
-          onClick={toggleCamera}
-        >
-          <i className={`fas fa-video${isCameraOff ? '-slash' : ''}`}></i>
-        </button>
-        <button className="control-btn end-call" onClick={onClose}>
-          End Call
-        </button>
-      </div>
+      <button onClick={onClose}>End Call</button>
     </div>
   );
 };
