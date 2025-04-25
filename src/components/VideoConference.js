@@ -1,34 +1,48 @@
 import React from 'react';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 
-const VideoConference = ({ doctorId, onClose }) => {
-  const roomName = `lycospec-${doctorId}`;
+const VideoConference = ({ doctorId, patientId, callId, onClose, isDoctor }) => {
+  const generateRoomName = () => {
+    return `lycospec-${doctorId}-${patientId}-${callId}`;
+  };
+
+  const displayName = isDoctor ? `Dr. ${doctorId}` : `Patient ${patientId}`;
 
   return (
-    <div className="video-conference" style={{ height: '100vh', width: '100%' }}>
+    <div className="video-conference-container">
       <JitsiMeeting
         domain="meet.jit.si"
-        roomName={roomName}
+        roomName={generateRoomName()}
         configOverwrite={{
           startWithAudioMuted: false,
           startWithVideoMuted: false,
-          prejoinPageEnabled: false
+          prejoinPageEnabled: false,
+          disableModeratorIndicator: true,
+          enableWelcomePage: false,
+          enableClosePage: true,
+          disableDeepLinking: true
         }}
         interfaceConfigOverwrite={{
-          TOOLBAR_BUTTONS: [
-            'microphone', 'camera', 'closedcaptions', 'desktop', 
-            'fullscreen', 'fodeviceselection', 'hangup', 'chat',
-            'settings', 'raisehand', 'videoquality', 'filmstrip',
-            'tileview'
-          ]
+          DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+          MOBILE_APP_PROMO: false,
+          SHOW_CHROME_EXTENSION_BANNER: false,
+          HIDE_INVITE_MORE_HEADER: true,
+          DEFAULT_BACKGROUND: '#ffffff',
+          TOOLBAR_ALWAYS_VISIBLE: true
+        }}
+        userInfo={{
+          displayName: displayName,
+          email: '',
         }}
         onApiReady={(externalApi) => {
+          externalApi.executeCommand('subject', ' ');
           externalApi.addEventListeners({
-            readyToClose: onClose
+            readyToClose: onClose,
+            participantLeft: onClose,
           });
         }}
         getIFrameRef={(iframeRef) => {
-          iframeRef.style.height = '100%';
+          iframeRef.style.height = '100vh';
           iframeRef.style.width = '100%';
         }}
       />
